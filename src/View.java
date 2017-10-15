@@ -1,78 +1,88 @@
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Iterator;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 
 public class View extends JFrame {
-	
+	//TODO: Found that if window is moved outside of screen, gets repainted	/Niklas
 	
 	private int size;
-	private GameArea theGameArea;
-	private static int recWidth = 20;
-	private static int recHeight  =20;
-	private static int recPosX= 0;
-	private static int recPosY = 0;
+	private static int recWidth;
+	private static int recHeight;
 	private static Tile[][] tiles;
+	private final JSplitPane splitPane;
+	private final JPanel leftPart;
+	private final GameArea theGameArea;	// container panel for the GameAreA
+    private final JPanel infoTab;	// container panel for the info
+    private int gameAreaSize = 500;
+    private int leftPaneWidth = gameAreaSize + 400;
+    private Dimension windowSize = new Dimension (1280,720);
 	
-	
-	public View() {
+    /**
+     * @param size Define the size in tiles of the board e.g. 16x16 (16 is recommended)
+     */
+	public View(int size) {
+		
+		this.size = size;
+		recWidth = (gameAreaSize/size);
+		recHeight = (gameAreaSize/size);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout(new GridLayout(1,2));
-		
-		//Code to use when testing
-		testPaint();
-		
+		this.setSize(windowSize);
+		this.setResizable(false);
+		splitPane = new JSplitPane();
+		getContentPane().setLayout(new GridLayout());
+		getContentPane().add(splitPane); 
+		splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+		splitPane.setDividerLocation(leftPaneWidth); 
+		splitPane.setDividerSize(1);
+		splitPane.setEnabled(false);
+		leftPart = new JPanel();
+		leftPart.setBackground(Color.WHITE);
 		theGameArea = new GameArea();
 		theGameArea.setBackground(Color.GRAY);
-		JPanel infoTab = new JPanel();
-		infoTab.setBackground(Color.BLACK);
-		this.setSize(800, 500);
-		this.add(theGameArea);
-		this.add(infoTab);
-	
+		theGameArea.setPreferredSize(new Dimension(gameAreaSize,gameAreaSize));
+		infoTab = new JPanel();
+		infoTab.setBackground(Color.GRAY);
+		splitPane.setLeftComponent(leftPart);
+		splitPane.setRightComponent(infoTab);
+		leftPart.setLayout(new GridBagLayout());
+		theGameArea.setSize(100,100);
+		leftPart.add(theGameArea);
 		
-		//this.pack();	
-		this.setVisible(true);		
-		
-	}
-	
-	//To use for test the paint funcitonality
-	private void testPaint() {
-		tiles = new Tile[16][16]; 
-		Tile t1 = new Tile(new boolean[] {false},false,false);
-		Tile t2 = new Tile(new boolean[] {false},true,false);
-		
-		tiles[0][0] = t1;
-		tiles[1][0] = t2;
-		redraw(tiles);
+		this.setVisible(true);	
 		
 	}
 	
 	public static class GameArea extends JPanel {
 		protected void paintComponent(Graphics g) {
 			super.paintComponents(g);
-			
+			System.out.println(tiles[0][0].getRobot());
 			int recPosX = 0;
 			int recPosY = 0;
-	
 			for(Tile[] t: tiles) {
 				for (Tile val: t) {
-					recPosX = recPosX + recWidth;
-					g.setColor(Color.GRAY);
-				    g.drawRect(recPosX, recPosY, recWidth, recHeight);
-				   
+					
+					if(val.getRobot()== null){
+						g.setColor(Color.GRAY);
+						 g.drawRect(recPosX, recPosY, recWidth, recHeight);
+					}else {
+						g.setColor(Color.BLACK);
+						g.fillRect(recPosX, recPosY, recWidth, recHeight);
+					}
+				    recPosX = recPosX + recWidth;
 				}
 				recPosX = 0;
 				recPosY = recPosY + recHeight;
 			}	
 		}
 	}
-
+	
 	public void redraw(Tile[][] tiles) {
 		this.tiles = tiles;
+		this.repaint();
 	}		
 }
