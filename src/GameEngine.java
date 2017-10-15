@@ -2,7 +2,8 @@ public class GameEngine {
 
 	public static void main(String[] args) {
         // Prints "Hello, World" to the terminal window.
-        System.out.println("Version 1!!!");
+		TestClass tc = new TestClass();
+        System.out.println(tc.getText());
     }
 
 }
