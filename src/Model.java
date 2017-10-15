@@ -23,7 +23,7 @@ public class Model {
 		for (int i = 0; i < tiles.length; i++) { 
 			for (int j = 0; j < tiles[j].length; j++) { 
 				if (id == tiles[i][j].getRobot().getId()) {
-					int[] position = {1,2};
+					int[] position = {i,j};
 					return position;
 				}
 			}

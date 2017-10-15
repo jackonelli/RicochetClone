@@ -1,7 +1,7 @@
+import static Constants.*;
+
 public class Controller
 {
-    private static final int SIZE = 16;
-    private static final int NUMBER_OF_ROBOTS = 4;
     private Model model(SIZE);
     private View view(SIZE);
     public Controller(Model model, View view){
@@ -9,44 +9,46 @@ public class Controller
         this.view = view;
     }
 
-    int robotID;
-    int direction;
-    public void initView(model, view){
+    public void RunGame(Model model, View view){
+        Redraw(model);
+        //while true?
+        //TODO: Get from user input
+        int robotID;
+        int direction;
+        Move(robotID, direction);
+
+    }
+    // No init: redraw everytime
+    /*public void initView(model, view){
         for(int row; row < SIZE; row++){
             for(int col; col < SIZE; col++){
                 tile = model.getTile(row, col);
                 view.drawTile(row, col, tile);
             } // Cols
         } // Rows
-    }
+    } */
 
-    public int[] move(int robotID, int direction){
+    private int[] Move(int robotID, int direction){
         int tilesMoved = 0;
-        int[] currentPosition = new int[2];
-        int[] newPosition = new int[2];
-        currentPosition = model.whereIsRobot(robotID);
-        boolean canMove = true;
         boolean[] tileHasWalls = new boolean[4];
+        int[] currentPosition = model.findRobot(robotID);
+        boolean canMove = true;
         switch(direction){
-            // North
-            case 1 :
+            case NORTH :
                 col = currentPosition[1];
                 row = currentPosition[0];
                 while(canMove){
-                    tileHasWalls = model.getWalls(row + tilesMoved + 1, col);
+                    tileHasWalls = model.getWallsOfTile(row + tilesMoved + 1, col);
                     wallBlocks = tileHasWalls[2];
-                    // Access tile?
-                    tileHasRobot = model.hasRobot(row + tilesMoved + 1, col);
+                    tileHasRobot = model.tileHasRobot(row + tilesMoved + 1, col);
                     if(wallBlocks || tileHasRobot){
                         canMove = false;
                     } else {
                         tilesMoved++;
                     }
                 }
-                newPosition[0] = row + tilesMoved;
-                newPosition[1] = col;
-            // East
-            case 2:
+                int[] newPosition = {row + tilesMoved, col};
+            case EAST:
                 col = currentPosition[1];
                 row = currentPosition[0];
                 while(canMove){
@@ -60,10 +62,7 @@ public class Controller
                         tilesMoved++;
                     }
                 }
-                newPosition[0] = row;
-                newPosition[1] = col + tilesMoved;
-            // South
-            case 3:
+            case SOUTH:
                 col = currentPosition[1];
                 row = currentPosition[0];
                 while(canMove){
@@ -77,10 +76,8 @@ public class Controller
                         tilesMoved++;
                     }
                 }
-                newPosition[0] = row - tilesMoved;
-                newPosition[1] = col;
-            // West
-            case 4:
+                int[] newPosition = {row - tilesMoved, col};
+            case WEST:
                 col = currentPosition[1];
                 row = currentPosition[0];
                 while(canMove){
@@ -94,13 +91,16 @@ public class Controller
                         tilesMoved++;
                     }
                 }
-                newPosition[0] = row;
-                newPosition[1] = col - tilesMoved;
+                int[] newPosition = {row, col - tilesMoved};
         }
-        return newPosition;
+        updateBoard(model,(robotID, newPosition);
     }
 
-    public void updateView(){
+    private void updateBoard(int robotID, int[] newPosition){
+        model.setRobot(robotID, newPosition);
+    }
+
+    private void Redraw(Model model){
 
     }
 }
