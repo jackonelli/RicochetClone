@@ -7,7 +7,10 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
@@ -26,7 +29,7 @@ public class View extends JFrame {
 	private final JSplitPane splitPane;
 	private final JPanel leftPart;
 	private final GameArea theGameArea;	// container panel for the GameAreA
-    private final JPanel infoTab;	// container panel for the info
+    private final InfoTab infoTab;	// container panel for the info
     private int gameAreaSize = 650;
     private int leftPaneWidth = gameAreaSize + 300;
     private Dimension windowSize = new Dimension (1280,720); //Dimensions of the window
@@ -63,15 +66,12 @@ public class View extends JFrame {
 		splitPane.setEnabled(false);
 		leftPart = new JPanel();
 		leftPart.setBackground(Color.WHITE);
-		theGameArea = new GameArea();
-		theGameArea.setBackground(Color.GRAY);
-		theGameArea.setPreferredSize(new Dimension(gameAreaSize,gameAreaSize));
-		infoTab = new JPanel();
+		theGameArea = new GameArea();		
+		infoTab = new InfoTab();
 		infoTab.setBackground(Color.GRAY);
 		splitPane.setLeftComponent(leftPart);
 		splitPane.setRightComponent(infoTab);
 		leftPart.setLayout(new GridBagLayout());
-		theGameArea.setSize(100,100);
 		leftPart.add(theGameArea);
 		
 		try {
@@ -84,12 +84,15 @@ public class View extends JFrame {
 		
 	}
 	
-	public static class GameArea extends JPanel {
-		
-		/**
-		 * 
-		 */
+	
+	public class GameArea extends JPanel {
 		private static final long serialVersionUID = 1L;
+		
+		public GameArea() {
+			this.setBackground(Color.GRAY);
+			this.setPreferredSize(new Dimension(gameAreaSize,gameAreaSize));
+		}
+		
 		int recPosX = 0;
 		int recPosY = 0;
 		boolean[] walls;
@@ -149,6 +152,53 @@ public class View extends JFrame {
 		}	
 	}
 	
+	public static class InfoTab extends JPanel{
+		public InfoTab() {
+			Font theFont = new Font("Courier New", Font.ITALIC, 24);
+			JLabel timeTextLable = new JLabel("Time left: ");
+			timeTextLable.setFont(theFont);
+			JLabel timeValueLable = new JLabel("1:00:00");
+			timeValueLable.setFont(theFont);
+			JLabel scoreTextLable = new JLabel("Score: ");
+			scoreTextLable.setFont(theFont);
+			JLabel scoreValueLable = new JLabel("0");
+			scoreValueLable.setFont(theFont);
+			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+			
+			//Define area for spacing to top
+			JPanel spaceTop = new JPanel();
+			spaceTop.setMaximumSize(new Dimension(300, 50));
+			
+			
+			//Define area for time
+			JPanel timeContainer = new JPanel();
+			timeContainer.setMaximumSize(new Dimension(300, 50));
+			timeContainer.add(timeTextLable);
+			timeContainer.add(timeValueLable);
+			
+			//Define area for score
+			JPanel scoreContainer = new JPanel();
+			scoreContainer.setMaximumSize(new Dimension(300, 50));
+			scoreContainer.add(scoreTextLable);
+			scoreContainer.add(scoreValueLable);
+			
+			//Define restart button
+			Button restartButton = new Button("Restart");
+			restartButton.setMaximumSize(new Dimension(300,50));
+			restartButton.setFont(theFont);
+			
+			//Add all items
+			this.add(spaceTop);
+			this.add(timeContainer);
+			this.add(scoreContainer);
+			this.add(restartButton);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param tiles - 2d array of tiles showing current state of gameboard
+	 */
 	public void redraw(Tile[][] tiles) {
 		this.tiles = tiles;
 		this.repaint();
@@ -168,7 +218,5 @@ public class View extends JFrame {
 		wTileImage = importImg;
 		importImg  = ImageIO.read(new File(E_TILE_IMAGE_URL));
 		eTileImage = importImg;
-
-
 	}
 }
