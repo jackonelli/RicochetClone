@@ -1,4 +1,3 @@
-
 .metadata
 bin/
 tmp/
@@ -46,6 +45,9 @@ local.properties
 
 # Ignore .class files
 *.class
+
+# Ignore .project files
+.project
 
 # Scala IDE specific (Scala & Java development for Eclipse)
 .cache-main
