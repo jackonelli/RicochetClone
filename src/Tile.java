@@ -32,8 +32,8 @@ public class Tile {
 		this.goal = true;
 	}
 	
-	//Fick error när jag frågade om tiles utan robot hade robot. 
-	//Ändrade så att den istället för att fråga efter id till robot som inte existerar istället kollar om robot finns eller är null /N
+	//Got error when i asked if tiles without robot had robot 
+	//Changed so that it instead checks if robot or null
 	public boolean hasRobot() {
 		if (this.robot != null) {
 			return true;

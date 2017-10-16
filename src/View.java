@@ -109,7 +109,7 @@ public class View extends JFrame {
 					walls = val.getWalls();
 					//Draw tile
 					drawEmptyTile(g2d);
-					//Draw Wall - nu exempel för en vägg i norr
+					//Draw Wall - nu exempel for en vagg i norr
 					checkIfDrawWall(walls, g2d);
 					//Draw Robot
 					if(val.hasRobot()==true){
