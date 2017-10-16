@@ -9,7 +9,7 @@ public class Controller
         this.view = view;
     }
 
-    public void RunGame(Model model, View view){
+    public void runGame(Model model, View view){
         Redraw(model);
         //while true?
         //TODO: Get from user input
@@ -28,7 +28,7 @@ public class Controller
         } // Rows
     } */
 
-    private int[] Move(int robotID, int direction){
+    private int[] move(int robotID, int direction){
         int tilesMoved = 0;
         boolean[] tileHasWalls = new boolean[4];
         int[] currentPosition = model.findRobot(robotID);
@@ -93,14 +93,14 @@ public class Controller
                 }
                 int[] newPosition = {row, col - tilesMoved};
         }
-        updateBoard(model,(robotID, newPosition);
+        updateBoard(model, robotID, newPosition);
     }
 
     private void updateBoard(int robotID, int[] newPosition){
         model.setRobot(robotID, newPosition);
     }
 
-    private void Redraw(Model model){
+    private void redraw(Model model){
 
     }
 }
