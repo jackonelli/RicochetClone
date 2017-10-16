@@ -1,9 +1,9 @@
-*ROBOTUBBIES*
+#ROBOTUBBIES#
 
 RICOCHET ROBOTS CLONE
 
 
-**Graphics**
+###Graphics###
 Game-graphics located in Graphics->Assets
 Tiles are named according to Tile-[ROBOT]-[WALL-LOCATION]-[GOAL]
 Example: 
@@ -14,6 +14,6 @@ Example:
 
 **
 
-True authors: Daniel, Jakob, Niklas & Fager
+**True authors:** Daniel, Jakob, Niklas & Fager
 
-No rights reserved
+**No rights reserved**
