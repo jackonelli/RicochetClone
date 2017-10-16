@@ -17,7 +17,7 @@ public class TestClassForView implements ActionListener {
 		v = new View(size, this);		
 		run();
 		v.redraw(tiles);
-		v.redraw(tiles);
+		v.paintFlippedTile(1);
 	}
 
 	public static void main(String[] args) {
@@ -31,15 +31,19 @@ public class TestClassForView implements ActionListener {
 				if (i==5 && j==7) {
 					//Edit to test different walls
 					tiles[i][j]= new Tile(new boolean[] {true,true,false,false},false,false);
+				}else if(i==12 && j==12){
+					//Edit to test goal tile
+					tiles[i][j]= new Tile(new boolean[] {false,false,false,false},false,true);
 				}else tiles[i][j]= new Tile(new boolean[] {false,false,false,false},false,false);
 			}
 		}
 		Tile t1 = tiles[2][5];
 		t1.setRobot(new Robot());
+		
 	}
 	
 	private void run() {
-		Timer t = new Timer(2000, new ActionListener() {
+		Timer t = new Timer(100, new ActionListener() {
 		
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -54,6 +58,10 @@ public class TestClassForView implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("Klicked Restart");
+		//remove flipped tile
+		v.paintFlippedTile(0);
+
+		
 		
 	}
 	
