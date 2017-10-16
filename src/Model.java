@@ -6,6 +6,10 @@ public class Model {
 		this.tiles = new Tile[16][16];
 	}
 	
+	public Model (int size) {
+		this.tiles = new Tile[size][size];
+	}
+
 	public Tile[][] getTiles() {
 		return this.tiles;
 	}
