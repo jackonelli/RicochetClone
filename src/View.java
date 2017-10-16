@@ -1,5 +1,7 @@
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,12 +36,13 @@ public class View extends JFrame {
     private static Image sTileImage;
     private static Image wTileImage;
     private static Image eTileImage;
-    private static final String ROBOT_IMAGE_URL ="src/img/imgRobot_v1.png";
-    private static final String EMPTY_TILE_IMAGE_URL ="src/img/imgTile_v1.png";
-    private static final String N_TILE_IMAGE_URL ="src/img/imgTile_N_v1.png";
-    private static final String S_TILE_IMAGE_URL ="src/img/imgTile_S_v1.png";
-    private static final String W_TILE_IMAGE_URL ="src/img/imgTile_W_v1.png";
-    private static final String E_TILE_IMAGE_URL ="src/img/imgTile_E_v1.png";
+    private static Image wallTileImage;
+    private static final String ROBOT_IMAGE_URL ="assets/graphics/layers/RedRobot.png";
+    private static final String EMPTY_TILE_IMAGE_URL ="assets/graphics/layers/Tile.png";   
+    private static final String N_TILE_IMAGE_URL ="assets/graphics/layers/WallNorth.png";
+    private static final String S_TILE_IMAGE_URL ="assets/graphics/layers/WallSouth.png";
+    private static final String W_TILE_IMAGE_URL ="assets/graphics/layers/WallWest.png";
+    private static final String E_TILE_IMAGE_URL ="assets/graphics/layers/WallEast.png";
 	
     /**
      * @param size Define the size in tiles of the board e.g. 16 -> 16x16 (16 is recommended)
@@ -92,6 +95,7 @@ public class View extends JFrame {
 		boolean[] walls;
 		public void paint(Graphics g) {
 			super.paintComponents(g);
+			Graphics2D g2d = (Graphics2D) g;
 			 recPosX = 0;
 			 recPosY = 0;
 			 walls = null;
@@ -101,12 +105,12 @@ public class View extends JFrame {
 				for (Tile val: t) {
 					walls = val.getWalls();
 					//Draw tile
-					drawEmptyTile(g);
+					drawEmptyTile(g2d);
 					//Draw Wall - nu exempel för en vägg i norr
-					checkIfDrawWall(walls, g);
+					checkIfDrawWall(walls, g2d);
 					//Draw Robot
 					if(val.hasRobot()==true){
-						drawRobotTile(g);
+						drawRobotTile(g2d);
 					}
 					recPosX = recPosX + recWidth;
 				}
@@ -115,33 +119,33 @@ public class View extends JFrame {
 			}
 			
 		}
-		private void checkIfDrawWall(boolean[] b, Graphics g) {
-			if(walls[0]) drawNorthTile(g);
+		private void checkIfDrawWall(boolean[] b, Graphics2D g2d) {
+			if(walls[0]) drawNorthTile(g2d);
 	
-			if(walls[1]) drawEastTile(g);
+			if(walls[1]) drawEastTile(g2d);
 			
-			if(walls[2]) drawSouthTile(g);
+			if(walls[2]) drawSouthTile(g2d);
 			
-			if(walls[3]) drawWestTile(g);
+			if(walls[3]) drawWestTile(g2d);
 		}
 		
-		private void drawNorthTile(Graphics g) {
-			g.drawImage(nTileImage, recPosX, recPosY, recWidth, recHeight, this);
+		private void drawNorthTile(Graphics2D g2d) {
+			g2d.drawImage(nTileImage, recPosX, recPosY, recWidth, recHeight, this);
 		}
-		private void drawEastTile(Graphics g) {
-			g.drawImage(eTileImage, recPosX, recPosY, recWidth, recHeight, this);
+		private void drawEastTile(Graphics2D g2d) {
+			g2d.drawImage(eTileImage, recPosX, recPosY, recWidth, recHeight, this);
 		}
-		private void drawSouthTile(Graphics g) {
-			g.drawImage(sTileImage, recPosX, recPosY, recWidth, recHeight, this);
+		private void drawSouthTile(Graphics2D g2d) {
+			g2d.drawImage(sTileImage, recPosX, recPosY, recWidth, recHeight, this);
 		}
-		private void drawWestTile(Graphics g) {
-			g.drawImage(wTileImage, recPosX, recPosY, recWidth, recHeight, this);
+		private void drawWestTile(Graphics2D g2d) {
+			g2d.drawImage(wTileImage, recPosX, recPosY, recWidth, recHeight, this);
 		}
-		private void drawEmptyTile(Graphics g) {
-			g.drawImage(emptyTileImage, recPosX, recPosY, recWidth, recHeight, this);
+		private void drawEmptyTile(Graphics2D g2d) {
+			g2d.drawImage(emptyTileImage, recPosX, recPosY, recWidth, recHeight, this);
 		}
-		private void drawRobotTile(Graphics g) {
-			g.drawImage(robotImage, recPosX, recPosY, recWidth, recHeight, this);
+		private void drawRobotTile(Graphics2D g2d) {
+			g2d.drawImage(robotImage, recPosX, recPosY, recWidth, recHeight, this);
 		}	
 	}
 	
@@ -164,6 +168,7 @@ public class View extends JFrame {
 		wTileImage = importImg;
 		importImg  = ImageIO.read(new File(E_TILE_IMAGE_URL));
 		eTileImage = importImg;
+
 
 	}
 }
