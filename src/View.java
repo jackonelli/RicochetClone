@@ -1,5 +1,6 @@
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -46,11 +47,16 @@ public class View extends JFrame {
     private static final String S_TILE_IMAGE_URL ="assets/graphics/layers/WallSouth.png";
     private static final String W_TILE_IMAGE_URL ="assets/graphics/layers/WallWest.png";
     private static final String E_TILE_IMAGE_URL ="assets/graphics/layers/WallEast.png";
+    private JLabel timeValueLable;
+    private JLabel scoreValueLable;
+    private ActionListener al;
 	
     /**
      * @param size Define the size in tiles of the board e.g. 16 -> 16x16 (16 is recommended)
+     * @param actionListener - an ActionListener for receiving e.g. restart button clicks
      */
-	public View(int size) {
+	public View(int size, ActionListener actionListener) {
+		this.al = actionListener;
 		this.size = size;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(windowSize);
@@ -109,7 +115,7 @@ public class View extends JFrame {
 					walls = val.getWalls();
 					//Draw tile
 					drawEmptyTile(g2d);
-					//Draw Wall - nu exempel for en vagg i norr
+					//Draw Wall 
 					checkIfDrawWall(walls, g2d);
 					//Draw Robot
 					if(val.hasRobot()==true){
@@ -152,23 +158,23 @@ public class View extends JFrame {
 		}	
 	}
 	
-	public static class InfoTab extends JPanel{
+	public class InfoTab extends JPanel{
+		
 		public InfoTab() {
 			Font theFont = new Font("Courier New", Font.ITALIC, 24);
 			JLabel timeTextLable = new JLabel("Time left: ");
 			timeTextLable.setFont(theFont);
-			JLabel timeValueLable = new JLabel("1:00:00");
+			timeValueLable = new JLabel("1:00:00");
 			timeValueLable.setFont(theFont);
 			JLabel scoreTextLable = new JLabel("Score: ");
 			scoreTextLable.setFont(theFont);
-			JLabel scoreValueLable = new JLabel("0");
+			scoreValueLable = new JLabel("0");
 			scoreValueLable.setFont(theFont);
 			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 			
 			//Define area for spacing to top
 			JPanel spaceTop = new JPanel();
 			spaceTop.setMaximumSize(new Dimension(300, 50));
-			
 			
 			//Define area for time
 			JPanel timeContainer = new JPanel();
@@ -186,6 +192,7 @@ public class View extends JFrame {
 			Button restartButton = new Button("Restart");
 			restartButton.setMaximumSize(new Dimension(300,50));
 			restartButton.setFont(theFont);
+			restartButton.addActionListener(al);
 			
 			//Add all items
 			this.add(spaceTop);
@@ -218,5 +225,18 @@ public class View extends JFrame {
 		wTileImage = importImg;
 		importImg  = ImageIO.read(new File(E_TILE_IMAGE_URL));
 		eTileImage = importImg;
+	}
+	/**
+	 * @param time - the current time in the game
+	 */
+	public void setTime(int time) {
+		timeValueLable.setText(String.valueOf(time));
+	}
+	
+	/**
+	 * @param score - the current score of the player
+	 */
+	public void setScore(int score) {
+		scoreValueLable.setText(String.valueOf(score));
 	}
 }

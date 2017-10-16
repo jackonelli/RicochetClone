@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 
-public class TestClassForView {
+public class TestClassForView implements ActionListener {
 	//To be used for testing the View-class. Will populate an array of tiles, add a robot and tell View to show it
 	
 	private static Tile[][] tiles;
@@ -14,7 +14,7 @@ public class TestClassForView {
 	public TestClassForView(){
 		tiles = new Tile[size][size];
 		populateTiles();
-		v = new View(size);		
+		v = new View(size, this);		
 		run();
 		v.redraw(tiles);
 		v.redraw(tiles);
@@ -29,7 +29,7 @@ public class TestClassForView {
 		for(int i=0; i< size; i++) {
 			for(int j=0; j< size; j++) {
 				if (i==5 && j==7) {
-					//Editera för att testa olika kombinationer för väggar
+					//Edit to test different walls
 					tiles[i][j]= new Tile(new boolean[] {true,true,false,false},false,false);
 				}else tiles[i][j]= new Tile(new boolean[] {false,false,false,false},false,false);
 			}
@@ -39,15 +39,21 @@ public class TestClassForView {
 	}
 	
 	private void run() {
-		Timer t = new Timer(100, new ActionListener() {
+		Timer t = new Timer(2000, new ActionListener() {
 		
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				v.redraw(tiles);
+				//v.setTime(10);
+				//v.setScore(1000);
 			}
 		});
 		t.start();
-		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		System.out.println("Klicked Restart");
 		
 	}
 	
