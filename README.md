@@ -4,7 +4,7 @@ RICOCHET ROBOTS CLONE
 
 
 ### Graphics ###
-Game-graphics located in Graphics->Assets
+Game-graphics located in assets->graphics
 Tiles are named according to Tile-[ROBOT]-[WALL-LOCATION]-[GOAL]
 Example: 
 + Tile - Tile
