@@ -8,8 +8,8 @@ public class Controller
     public final int EAST = 2;
     public final int SOUTH = 3;
     public final int WEST = 4;
-    private Model model = new Model(SIZE);
-    private View view = new View(SIZE);
+    private Model model;
+    private View view;
     public Controller(Model model, View view){
         this.model = model; // Array
         this.view = view;
@@ -17,22 +17,12 @@ public class Controller
 
     public void runGame(Model model, View view){
         view.redraw(model.getTiles());
-        //while true?
         //TODO: Get from user input
         int robotID;
         int direction;
         move(robotID, direction);
 
     }
-    // No init: redraw everytime
-    /*public void initView(model, view){
-        for(int row; row < SIZE; row++){
-            for(int col; col < SIZE; col++){
-                tile = model.getTile(row, col);
-                view.drawTile(row, col, tile);
-            } // Cols
-        } // Rows
-    } */
 
     private int[] move(int robotID, int direction){
         int tilesMoved = 0;
