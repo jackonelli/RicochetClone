@@ -33,17 +33,17 @@ public class View extends JFrame {
     private static Image robotImage;
     private static Image emptyTileImage;
     private static Image nTileImage;
-  // private static Image sTileImage; // Not used right now
-  // private static Image wTileImage; // Not used right now
+    private static Image sTileImage;
+    private static Image wTileImage; // Not used right now
     private static Image eTileImage; 
     private static Image middleTileImage;
     private static Image goalTileImage;
     private static final String ROBOT_IMAGE_URL ="assets/graphics/layers/RedRobot.png";
     private static final String EMPTY_TILE_IMAGE_URL ="assets/graphics/layers/Tile.png";   
     private static final String N_TILE_IMAGE_URL ="assets/graphics/layers/WallNorth.png";
-   // private static final String E_TILE_IMAGE_URL ="assets/graphics/layers/WallEast.png";
-   // private static final String S_TILE_IMAGE_URL ="assets/graphics/layers/WallSouth.png";
-   // private static final String W_TILE_IMAGE_URL ="assets/graphics/layers/WallWest.png";
+    private static final String E_TILE_IMAGE_URL ="assets/graphics/layers/WallEast.png";
+    private static final String S_TILE_IMAGE_URL ="assets/graphics/layers/WallSouth.png";
+    private static final String W_TILE_IMAGE_URL ="assets/graphics/layers/WallWest.png";
     private static final String MIDDLE_TILE_IMAGE_URL ="assets/graphics/layers/MiddleTile.png";
     private static final String GOAL_TILE_IMAGE_URL ="assets/graphics/layers/Goal.png";
     private JLabel timeValueLable;
@@ -152,10 +152,10 @@ public class View extends JFrame {
 			g2d.drawImage(eTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
 		}
 		private void drawSouthTile(Graphics2D g2d) {
-			g2d.drawImage(rotateImage.RotateImage(N_TILE_IMAGE_URL, 2), recPosX, recPosY, tileWidth, tileHeight, this);
+			g2d.drawImage(sTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
 		}
 		private void drawWestTile(Graphics2D g2d) {
-			g2d.drawImage(rotateImage.RotateImage(N_TILE_IMAGE_URL, 3), recPosX, recPosY, tileWidth, tileHeight, this);
+			g2d.drawImage(wTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
 		}
 		private void drawEmptyTile(Graphics2D g2d) {
 			g2d.drawImage(emptyTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
@@ -235,24 +235,24 @@ public class View extends JFrame {
 	
 	private void importImages() throws IOException {
 		BufferedImage importImg;
+		BufferedImage wallTiles;
 		importImg  = ImageIO.read(new File(ROBOT_IMAGE_URL));
 		robotImage = importImg;
 		importImg  = ImageIO.read(new File(EMPTY_TILE_IMAGE_URL));
 		emptyTileImage = importImg;
-		importImg  = ImageIO.read(new File(N_TILE_IMAGE_URL));
-		nTileImage = importImg;
-		eTileImage = rotateImage.RotateImage(N_TILE_IMAGE_URL, 1);	
-	/*
-	 * Additional Tiles, not needed now as we rotate the images. Maybe useful
-	 * in the future if the tiles are not just rotations of eachother
-	 * 	
-	 * importImg  = ImageIO.read(new File(S_TILE_IMAGE_URL));
-	 * sTileImage = importImg;
-	 * importImg  = ImageIO.read(new File(W_TILE_IMAGE_URL));
-	 * wTileImage = importImg;
-	 * importImg  = ImageIO.read(new File(E_TILE_IMAGE_URL));
-	 * eTileImage = importImg;
-	*/
+		wallTiles  = ImageIO.read(new File(N_TILE_IMAGE_URL));
+		nTileImage = wallTiles;
+		eTileImage = rotateImage.RotateImage(wallTiles, 1);
+		sTileImage = rotateImage.RotateImage(wallTiles, 2);
+		wTileImage = rotateImage.RotateImage(wallTiles, 3);
+	
+//		  importImg  = ImageIO.read(new File(S_TILE_IMAGE_URL));
+//		  sTileImage = importImg;
+//		  importImg  = ImageIO.read(new File(W_TILE_IMAGE_URL));
+//		  wTileImage = importImg;
+//		  importImg  = ImageIO.read(new File(E_TILE_IMAGE_URL));
+//		  eTileImage = importImg;
+//	
 		importImg  = ImageIO.read(new File(GOAL_TILE_IMAGE_URL));
 		goalTileImage = importImg;
 		importImg  = ImageIO.read(new File(MIDDLE_TILE_IMAGE_URL));
