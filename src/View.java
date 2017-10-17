@@ -33,17 +33,17 @@ public class View extends JFrame {
     private static Image robotImage;
     private static Image emptyTileImage;
     private static Image nTileImage;
-    private static Image sTileImage;
-    private static Image wTileImage;
-    private static Image eTileImage;
+  // private static Image sTileImage; // Not used right now
+  // private static Image wTileImage; // Not used right now
+  // private static Image eTileImage; // not used right now
     private static Image middleTileImage;
     private static Image goalTileImage;
     private static final String ROBOT_IMAGE_URL ="assets/graphics/layers/RedRobot.png";
     private static final String EMPTY_TILE_IMAGE_URL ="assets/graphics/layers/Tile.png";   
     private static final String N_TILE_IMAGE_URL ="assets/graphics/layers/WallNorth.png";
-    private static final String S_TILE_IMAGE_URL ="assets/graphics/layers/WallSouth.png";
-    private static final String W_TILE_IMAGE_URL ="assets/graphics/layers/WallWest.png";
-    private static final String E_TILE_IMAGE_URL ="assets/graphics/layers/WallEast.png";
+   // private static final String E_TILE_IMAGE_URL ="assets/graphics/layers/WallEast.png";
+   // private static final String S_TILE_IMAGE_URL ="assets/graphics/layers/WallSouth.png";
+   // private static final String W_TILE_IMAGE_URL ="assets/graphics/layers/WallWest.png";
     private static final String MIDDLE_TILE_IMAGE_URL ="assets/graphics/layers/MiddleTile.png";
     private static final String GOAL_TILE_IMAGE_URL ="assets/graphics/layers/Goal.png";
     private JLabel timeValueLable;
@@ -241,12 +241,17 @@ public class View extends JFrame {
 		emptyTileImage = importImg;
 		importImg  = ImageIO.read(new File(N_TILE_IMAGE_URL));
 		nTileImage = importImg;
-		importImg  = ImageIO.read(new File(S_TILE_IMAGE_URL));
-		sTileImage = importImg;
-		importImg  = ImageIO.read(new File(W_TILE_IMAGE_URL));
-		wTileImage = importImg;
-		importImg  = ImageIO.read(new File(E_TILE_IMAGE_URL));
-		eTileImage = importImg;
+	/*
+	 * Additional Tiles, not needed now as we rotate the images. Maybe useful
+	 * in the future if the tiles are not just rotations of eachother
+	 * 	
+	 * importImg  = ImageIO.read(new File(S_TILE_IMAGE_URL));
+	 * sTileImage = importImg;
+	 * importImg  = ImageIO.read(new File(W_TILE_IMAGE_URL));
+	 * wTileImage = importImg;
+	 * importImg  = ImageIO.read(new File(E_TILE_IMAGE_URL));
+	 * eTileImage = importImg;
+	*/
 		importImg  = ImageIO.read(new File(GOAL_TILE_IMAGE_URL));
 		goalTileImage = importImg;
 		importImg  = ImageIO.read(new File(MIDDLE_TILE_IMAGE_URL));
