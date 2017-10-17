@@ -1,6 +1,7 @@
 
 public class Model {
 	private Tile[][] tiles;
+	private Robot[] robots ;
 	
 	public Model () {
 		this.tiles = new Tile[16][16];
@@ -14,6 +15,10 @@ public class Model {
 		return this.tiles;
 	}
 	
+	public void addRobot(){
+
+	}
+
 	public boolean[] getWallsFromTile (int row, int col) {
 		return tiles[row][col].getWalls();
 	}
@@ -22,18 +27,34 @@ public class Model {
 		return tiles[row][col].hasRobot();
 	}
 	
-	public int[] findRobot(int id) {
+	// public int[] findRobot(int RobotId) {
 		
-		for (int i = 0; i < tiles.length; i++) { 
-			for (int j = 0; j < tiles[j].length; j++) { 
-				if (id == tiles[i][j].getRobot().getId()) {
-					int[] position = {i,j};
-					return position;
-				}
+	// 	for (int i = 0; i < tiles.length; i++) { 
+	// 		for (int j = 0; j < tiles[j].length; j++) { 
+	// 			if (id == tiles[i][j].getRobot().getId()) {
+	// 				int[] position = {i,j};
+	// 				return position;
+	// 			}
+	// 		}
+	// 	}
+	// 	int[] empty = {0,0};
+	// 	return empty;
+
+	// }
+	public void setRobot(int robotId, int row, int col){
+		for (Robot robot : robots) {
+			if (robot.id == robotId){
+				robot.setPosish(row, col)
+			}
+	}
+	public Robot findRobot(int robotId){
+
+		Robot tempRobot = new Robot();
+
+		for (Robot robot : robots) {
+			if (robot.id == robotId){
+				tempRobot = robot; 
 			}
 		}
-		int[] empty = {0,0};
-		return empty;
-
-	}
+		return tempRobot;
 }

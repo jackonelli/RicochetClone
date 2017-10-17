@@ -2,7 +2,6 @@
 public class Tile {
 	
 	private boolean[] walls;
-	private Robot robot = null;
 	private boolean goal;
 	
 	/**
@@ -20,9 +19,9 @@ public class Tile {
 		return this.walls;
 	}
 	
-	public Robot getRobot() {
-		return this.robot;
-	}
+	// public Robot getRobot() {
+	// 	return this.robot;
+	// }
 	
 	public boolean hasGoal() {
 		return this.goal;
@@ -34,22 +33,22 @@ public class Tile {
 	
 	//Got error when i asked if tiles without robot had robot 
 	//Changed so that it instead checks if robot or null
-	public boolean hasRobot() {
-		if (this.robot != null) {
-			return true;
-		}
-		else
-			return false;
+	// public boolean hasRobot() {
+	// 	if (this.robot != null) {
+	// 		return true;
+	// 	}
+	// 	else
+	// 		return false;
 		
-	}
+	// }
 	
 	public void makeGoal() {
 		this.goal = true;
 	}
 	
-	public void setRobot(Robot robot) {
-		this.robot = robot;
-	}
+	// public void setRobot(Robot robot) {
+	// 	this.robot = robot;
+	// }
 	
 	
 	
