@@ -35,7 +35,7 @@ public class View extends JFrame {
     private static Image nTileImage;
   // private static Image sTileImage; // Not used right now
   // private static Image wTileImage; // Not used right now
-  // private static Image eTileImage; // not used right now
+    private static Image eTileImage; 
     private static Image middleTileImage;
     private static Image goalTileImage;
     private static final String ROBOT_IMAGE_URL ="assets/graphics/layers/RedRobot.png";
@@ -149,7 +149,7 @@ public class View extends JFrame {
 			g2d.drawImage(nTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
 		}
 		private void drawEastTile(Graphics2D g2d) {
-			g2d.drawImage(rotateImage.RotateImage(N_TILE_IMAGE_URL, 1), recPosX, recPosY, tileWidth, tileHeight, this);
+			g2d.drawImage(eTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
 		}
 		private void drawSouthTile(Graphics2D g2d) {
 			g2d.drawImage(rotateImage.RotateImage(N_TILE_IMAGE_URL, 2), recPosX, recPosY, tileWidth, tileHeight, this);
@@ -241,6 +241,7 @@ public class View extends JFrame {
 		emptyTileImage = importImg;
 		importImg  = ImageIO.read(new File(N_TILE_IMAGE_URL));
 		nTileImage = importImg;
+		eTileImage = rotateImage.RotateImage(N_TILE_IMAGE_URL, 1);	
 	/*
 	 * Additional Tiles, not needed now as we rotate the images. Maybe useful
 	 * in the future if the tiles are not just rotations of eachother
