@@ -31,6 +31,7 @@ public class TestClassForView implements ActionListener {
 				if (i==5 && j==7) {
 					//Edit to test different walls
 					tiles[i][j]= new Tile(new boolean[] {true,true,false,false},false,false);
+					tiles[i-2][j-1]= new Tile(new boolean[] {true,true,true,true},false,false);
 				}else if(i==12 && j==12){
 					//Edit to test goal tile
 					tiles[i][j]= new Tile(new boolean[] {false,false,false,false},false,true);
