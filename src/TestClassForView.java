@@ -11,6 +11,7 @@ public class TestClassForView implements ActionListener {
 	private static Tile[][] tiles;
 	private int SIZE = 16;
 	private View v;
+	private Robot[] theRobots = new Robot[1];
 	
 	public TestClassForView(){
 		
@@ -18,7 +19,7 @@ public class TestClassForView implements ActionListener {
 		populateGameBoard();
 		v = new View(SIZE, this);		
 		run();
-		v.redraw(tiles);
+		v.redraw(tiles, theRobots);
 		v.paintFlippedTile(1);
 	}
 	
@@ -49,11 +50,6 @@ public class TestClassForView implements ActionListener {
 					tiles[i][j]= new Tile(new boolean[] {false,false,false,false},false,false);
 			}
 		}
-		Tile t1 = tiles[2][5];
-		t1.setRobot(new Robot());
-		
-		
-		
 	}
 	
 	private void run() {
@@ -61,7 +57,7 @@ public class TestClassForView implements ActionListener {
 		
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				v.redraw(tiles);
+				v.redraw(tiles, theRobots);
 				//v.setTime(10);
 				//v.setScore(1000);
 			}
@@ -79,7 +75,7 @@ public class TestClassForView implements ActionListener {
 		}
 		gameBoard = createWalls(gameBoard);
 		gameBoard = createGoals(gameBoard);
-		gameBoard = createRobots(gameBoard);
+		theRobots = createRobots();
 		setTiles(gameBoard);
 		
 		
@@ -160,14 +156,12 @@ public class TestClassForView implements ActionListener {
 		}
 		return gameBoard;
 	}
-	private Tile[][] createRobots(Tile[][] gameBoard) {
-		Point[] theRobots = new Point[] {new Point(6,7)};
-		for (Point theRobotsPoint: theRobots) {
-			Tile t = gameBoard[(int) theRobotsPoint.getX()][(int) theRobotsPoint.getY()];
-			//Add Robot
-			t.setRobot(new Robot());
-		}
-		return gameBoard;
+	private Robot[] createRobots() {		
+		Robot[] bufferList = new Robot[1];
+		Robot r1 = new Robot();
+		r1.setPosish(2, 1);
+		bufferList[0] = r1;
+		return bufferList;
 	}
 
 	@Override

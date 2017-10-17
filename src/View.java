@@ -50,6 +50,7 @@ public class View extends JFrame {
     private JLabel scoreValueLable;
     private ActionListener al;
     private int flippedTile;
+    private Robot[] theRobots;
    
 	
     /**
@@ -117,10 +118,6 @@ public class View extends JFrame {
 					drawEmptyTile(g2d);
 					//Draw Wall 
 					checkIfDrawWall(walls, g2d);
-					//Draw Robot
-					if(val.hasRobot()){
-						drawRobotTile(g2d);
-					}
 					if(val.hasGoal()) {
 						drawGoalTile(g2d);
 					}
@@ -131,6 +128,13 @@ public class View extends JFrame {
 			}
 			drawMiddleTile(g2d);
 			drawFlippedTile(g2d);
+			drawRobots(g2d);
+		}
+		private void drawRobots(Graphics2D g2d) {
+			for(Robot r: theRobots) {
+				drawRobot(g2d, r.getPosish());
+			}
+			
 		}
 		private void checkIfDrawWall(boolean[] b, Graphics2D g2d) {
 			if(walls[0]) drawNorthTile(g2d);
@@ -157,8 +161,8 @@ public class View extends JFrame {
 		private void drawEmptyTile(Graphics2D g2d) {
 			g2d.drawImage(emptyTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
 		}
-		private void drawRobotTile(Graphics2D g2d) {
-			g2d.drawImage(robotImage, recPosX, recPosY, tileWidth, tileHeight, this);
+		private void drawRobot(Graphics2D g2d, Point p) {
+			g2d.drawImage(robotImage, (p.y)*tileWidth, (p.x)*tileHeight, tileWidth, tileHeight, this);
 		}
 		private void drawGoalTile(Graphics2D g2d) {
 				g2d.drawImage(goalTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
@@ -225,8 +229,9 @@ public class View extends JFrame {
 	 * 
 	 * @param tiles - 2d array of tiles showing current state of gameboard
 	 */
-	public void redraw(Tile[][] tiles) {
+	public void redraw(Tile[][] tiles, Robot[] theRobots) {
 		this.tiles = tiles;
+		this.theRobots = theRobots;
 		this.repaint();
 	}		
 	

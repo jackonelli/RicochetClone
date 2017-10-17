@@ -15,6 +15,14 @@ public class Model {
 		return this.tiles;
 	}
 	
+	public void setTiles(Tile[][] gameBoard) {
+		tiles = gameBoard;
+	}
+	
+	public Robot[] getRobots() {
+		return robots;
+	}
+	
 	public void addRobot(){
 
 	}

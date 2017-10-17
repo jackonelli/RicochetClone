@@ -1,3 +1,4 @@
+import java.awt.Point;
 
 public class Robot {
 	private int id;
@@ -11,11 +12,11 @@ public class Robot {
 		return this.color;
 	}
 
-	public int[] getPosish(){
-		return this.Point;
+	public Point getPosish(){
+		return posish;
 	}
 
 	public void setPosish(int row, int col){
-		this.Point = Point(row, col);
+		posish = new Point(row, col);
 	}
 }

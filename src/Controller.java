@@ -20,7 +20,7 @@ public class Controller implements ActionListener
     }
 
     public void runGame(Model model, View view){
-        view.redraw(model.getTiles());
+        view.redraw(model.getTiles(), model.getRobots());
         //while true?
         //TODO: Get from user input
         int robotID;
@@ -133,7 +133,8 @@ public class Controller implements ActionListener
   		}
   		gameBoard = createWalls(gameBoard);
   		gameBoard = createGoals(gameBoard);
-  		gameBoard = createRobots(gameBoard);
+  		Robot[] robotListBuffer = createRobots();
+  		model.setRobot(robotListBuffer[0].getId(), robotListBuffer[0].getPosish().x, robotListBuffer[0].getPosish().y);
   		model.setTiles(gameBoard);
   		
   		
@@ -212,15 +213,13 @@ public class Controller implements ActionListener
   		return gameBoard;
   	}
   	
-  	private Tile[][] createRobots(Tile[][] gameBoard) {
-  		Point[] theRobots = new Point[] {new Point(6,7)};
-  		for (Point theRobotsPoint: theRobots) {
-  			Tile t = gameBoard[(int) theRobotsPoint.getX()][(int) theRobotsPoint.getY()];
-  			//Add Robot
-  			t.setRobot(new Robot());
-  		}
-  		return gameBoard;
-  	}
+  	private Robot[] createRobots() {		
+		Robot[] bufferList = new Robot[1];
+		Robot r1 = new Robot();
+		r1.setPosish(2, 1);
+		bufferList[0] = r1;
+		return bufferList;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
