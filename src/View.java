@@ -50,7 +50,9 @@ public class View extends JFrame {
     private JLabel scoreValueLable;
     private ActionListener al;
     private int flippedTile;
-   
+    private RotateImage rotateImage = new RotateImage();
+    
+    
 	
     /**
      * @param size Define the size in tiles of the board e.g. 16 -> 16x16 (16 is recommended)
@@ -142,17 +144,18 @@ public class View extends JFrame {
 			if(walls[3]) drawWestTile(g2d);
 		}
 		
+		
 		private void drawNorthTile(Graphics2D g2d) {
 			g2d.drawImage(nTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
 		}
 		private void drawEastTile(Graphics2D g2d) {
-			g2d.drawImage(eTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
+			g2d.drawImage(rotateImage.RotateImage(N_TILE_IMAGE_URL, 1), recPosX, recPosY, tileWidth, tileHeight, this);
 		}
 		private void drawSouthTile(Graphics2D g2d) {
-			g2d.drawImage(sTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
+			g2d.drawImage(rotateImage.RotateImage(N_TILE_IMAGE_URL, 2), recPosX, recPosY, tileWidth, tileHeight, this);
 		}
 		private void drawWestTile(Graphics2D g2d) {
-			g2d.drawImage(wTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
+			g2d.drawImage(rotateImage.RotateImage(N_TILE_IMAGE_URL, 3), recPosX, recPosY, tileWidth, tileHeight, this);
 		}
 		private void drawEmptyTile(Graphics2D g2d) {
 			g2d.drawImage(emptyTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
