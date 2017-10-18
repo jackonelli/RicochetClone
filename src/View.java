@@ -22,9 +22,9 @@ public class View extends JFrame {
 	
 	private static int tileWidth;
 	private static int tileHeight;
-	private Tile[][] tiles;
-	private final JSplitPane splitPane;
-	private final JPanel leftPart;
+	private Tile[][] gameBoard;
+	private final JSplitPane windowDivider;
+	private final JPanel leftSection;
 	private final GameArea theGameArea;	// container panel for the GameAreA
     private final InfoTab infoTab;	// container panel for the info
     private int gameAreaSize = 650;
@@ -51,6 +51,7 @@ public class View extends JFrame {
     private ActionListener al;
     private int flippedTile;
     private Robot[] theRobots;
+    private int size;
    
 	
     /**
@@ -58,38 +59,53 @@ public class View extends JFrame {
      * @param actionListener - an ActionListener for receiving e.g. restart button clicks
      */
 	public View(int size, Tile[][] gameBoard, ActionListener actionListener) {
+		this.size = size;
 		this.al = actionListener;
+		this.gameBoard = gameBoard;
+		
+		windowDivider = new JSplitPane();
+		theGameArea = new GameArea();		
+		infoTab = new InfoTab();
+		leftSection = new JPanel();
+		
+		getContentPane().add(windowDivider); 
+		initiateView();
+		initiateWindowDivider();
+		initiateLeftSection();
+		initiateInfoTab();
+		
+		windowDivider.setLeftComponent(leftSection);
+		windowDivider.setRightComponent(infoTab);
+		leftSection.add(theGameArea);
+		
+		try {
+			importImages();
+		} catch (IOException e) {e.printStackTrace();}
+		
+		this.setVisible(true);	
+		
+	}
+	private void initiateView() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(windowSize);
 		this.setResizable(false);
 		tileWidth = (gameAreaSize/size);
 		tileHeight = (gameAreaSize/size);
-		splitPane = new JSplitPane();
 		getContentPane().setLayout(new GridLayout());
-		getContentPane().add(splitPane); 
-		splitPane.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-		splitPane.setDividerLocation(leftPaneWidth); 
-		splitPane.setDividerSize(1);
-		splitPane.setEnabled(false);
-		leftPart = new JPanel();
-		leftPart.setBackground(Color.WHITE);
-		theGameArea = new GameArea();		
-		infoTab = new InfoTab();
+	}
+	
+	private void initiateWindowDivider() {
+		windowDivider.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
+		windowDivider.setDividerLocation(leftPaneWidth); 
+		windowDivider.setDividerSize(1);
+		windowDivider.setEnabled(false);
+	}
+	private void initiateLeftSection() {
+		leftSection.setBackground(Color.WHITE);
+		leftSection.setLayout(new GridBagLayout());
+	}
+	private void initiateInfoTab() {
 		infoTab.setBackground(Color.GRAY);
-		splitPane.setLeftComponent(leftPart);
-		splitPane.setRightComponent(infoTab);
-		leftPart.setLayout(new GridBagLayout());
-		leftPart.add(theGameArea);
-		tiles = gameBoard;
-		
-		try {
-			importImages();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		this.setVisible(true);	
-		
 	}
 	
 	public class GameArea extends JPanel {
@@ -112,7 +128,7 @@ public class View extends JFrame {
 			 walls = null;
 			
 			//Decide what and where to draw
-			for(Tile[] t: tiles) {
+			for(Tile[] t: gameBoard) {
 				for (Tile val: t) {
 					walls = val.getWalls();
 					//Draw tile
@@ -136,9 +152,7 @@ public class View extends JFrame {
 				for(Robot r: theRobots) {
 					drawRobot(g2d, r.getPosish());
 				}
-			}
-			
-			
+			}	
 		}
 		private void checkIfDrawWall(boolean[] b, Graphics2D g2d) {
 			if(walls[0]) drawNorthTile(g2d);
@@ -220,6 +234,7 @@ public class View extends JFrame {
 			restartButton.setMaximumSize(new Dimension(300,50));
 			restartButton.setFont(theFont);
 			restartButton.addActionListener(al);
+			//restartButton.
 			
 			//Add all items
 			this.add(spaceTop);
@@ -234,7 +249,7 @@ public class View extends JFrame {
 	 * @param tiles - 2d array of tiles showing current state of gameboard
 	 */
 	public void redraw(Tile[][] tiles, Robot[] theRobots) {
-		this.tiles = tiles;
+		this.gameBoard = tiles;
 		this.theRobots = theRobots;
 		this.repaint();
 	}		
