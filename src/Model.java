@@ -52,9 +52,10 @@ public class Model {
 	public void setRobot(int robotId, int row, int col){
 		for (Robot robot : robots) {
 			if (robot.id == robotId){
-				robot.setPosish(row, col)
+				robot.setPosish(row, col);
 			}
-	}
+	    }
+    }
 	public Robot findRobot(int robotId){
 
 		Robot tempRobot = new Robot();
@@ -65,4 +66,5 @@ public class Model {
 			}
 		}
 		return tempRobot;
+    }
 }
