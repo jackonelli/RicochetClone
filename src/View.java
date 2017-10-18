@@ -1,6 +1,7 @@
 
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -62,6 +63,7 @@ public class View extends JFrame {
 		this.size = size;
 		this.al = actionListener;
 		this.gameBoard = gameBoard;
+		//this.addKeyListener((KeyListener) new KeyboardListener());
 		
 		windowDivider = new JSplitPane();
 		theGameArea = new GameArea();		
@@ -77,6 +79,7 @@ public class View extends JFrame {
 		windowDivider.setLeftComponent(leftSection);
 		windowDivider.setRightComponent(infoTab);
 		leftSection.add(theGameArea);
+		//leftSection.addKeyListener((KeyListener) new KeyboardListener());
 		
 		try {
 			importImages();
@@ -234,6 +237,7 @@ public class View extends JFrame {
 			restartButton.setMaximumSize(new Dimension(300,50));
 			restartButton.setFont(theFont);
 			restartButton.addActionListener(al);
+			restartButton.setFocusable(false);
 			//restartButton.
 			
 			//Add all items

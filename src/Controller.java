@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 
 public class Controller implements ActionListener
 {
@@ -23,8 +24,10 @@ public class Controller implements ActionListener
     
     public Controller(){
     	this.model = new Model(SIZE); // Array
+	//this.addKeyListener((KeyListener) new KeyBoardListener());
     	populateGameBoard();
         this.view = new View(SIZE,model.getTiles(),this);
+        view.addKeyListener((KeyListener) new KeyboardListener());
     }
 
     public void runGame(){
@@ -243,7 +246,7 @@ public class Controller implements ActionListener
 		bufferList[0] = r1;
 		return bufferList;
 	}
-
+  	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getID() == 1001) {
