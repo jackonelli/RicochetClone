@@ -17,10 +17,10 @@ public class TestClassForView implements ActionListener {
 		
 //		populateTiles();
 		populateGameBoard();
-		v = new View(SIZE, this);		
+		v = new View(SIZE, tiles, this);		
 		run();
-		v.redraw(tiles, theRobots);
-		v.paintFlippedTile(1);
+		//v.redraw(tiles, theRobots);
+		//v.paintFlippedTile(1);
 	}
 	
 	private Tile[][] getTiles(){

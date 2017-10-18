@@ -24,8 +24,8 @@ public class Model {
 		return robots;
 	}
 	
-	public void addRobot(){
-
+	public void addRobots(Robot[] robots){
+		this.robots = robots;
 	}
 
 	public boolean[] getWallsFromTile (int row, int col) {

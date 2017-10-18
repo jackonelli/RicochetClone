@@ -1,10 +1,4 @@
 /**
- * 
- */
-
-/**
- * @author jonathanfager
- *
  *	The main class which just brings together the MVC
  *	and calls the runGame method inside Controller
  *

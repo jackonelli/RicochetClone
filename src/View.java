@@ -57,7 +57,7 @@ public class View extends JFrame {
      * @param size Define the size in tiles of the board e.g. 16 -> 16x16 (16 is recommended)
      * @param actionListener - an ActionListener for receiving e.g. restart button clicks
      */
-	public View(int size, ActionListener actionListener) {
+	public View(int size, Tile[][] gameBoard, ActionListener actionListener) {
 		this.al = actionListener;
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(windowSize);
@@ -80,6 +80,7 @@ public class View extends JFrame {
 		splitPane.setRightComponent(infoTab);
 		leftPart.setLayout(new GridBagLayout());
 		leftPart.add(theGameArea);
+		tiles = gameBoard;
 		
 		try {
 			importImages();
@@ -131,9 +132,12 @@ public class View extends JFrame {
 			drawRobots(g2d);
 		}
 		private void drawRobots(Graphics2D g2d) {
-			for(Robot r: theRobots) {
-				drawRobot(g2d, r.getPosish());
+			if (theRobots != null){
+				for(Robot r: theRobots) {
+					drawRobot(g2d, r.getPosish());
+				}
 			}
+			
 			
 		}
 		private void checkIfDrawWall(boolean[] b, Graphics2D g2d) {

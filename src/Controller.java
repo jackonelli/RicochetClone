@@ -17,19 +17,19 @@ public class Controller implements ActionListener
     public final int GREEN = 3;
     public final int YELLOW = 4;
     public final int SILVER = 5;
-
-    private Model model = new Model(SIZE);
-    private View view = new View(SIZE, this);
-
+    private Model model;
+    private View view;
     private ArrayList<Integer> unvisitedGoalz = new ArrayList<Integer>();
-
+    
     public Controller(){
-        this.model = new Model(SIZE); // Array
-        this.view = new View(SIZE,this);
+    	this.model = new Model(SIZE); // Array
+    	populateGameBoard();
+        this.view = new View(SIZE,model.getTiles(),this);
     }
 
     public void runGame(){
         //getNewGoal();
+    	
         view.redraw(model.getTiles(), model.getRobots());
         //while true?
         //TODO: Get from user input
@@ -124,15 +124,15 @@ public class Controller implements ActionListener
     //Adds tiles, goals and a robots
   	private void populateGameBoard() {
   		Tile[][] gameBoard = new Tile[SIZE][SIZE];
-  		for(int i=0; i< 16; i++) {
-  			for(int j=0; j< 16; j++) {
+  		for(int i=0; i< SIZE; i++) {
+  			for(int j=0; j< SIZE; j++) {
   				gameBoard[i][j]= new Tile(new boolean[] {false,false,false,false},false,false);
   			}
   		}
   		gameBoard = createWalls(gameBoard);
   		gameBoard = createGoals(gameBoard);
-  		Robot[] robotListBuffer = createRobots();
-  		model.setRobot(robotListBuffer[0].getId(), robotListBuffer[0].getPosish().x, robotListBuffer[0].getPosish().y);
+  		model.addRobots(createRobots());
+  		//model.setRobot(robotListBuffer[0].getId(), robotListBuffer[0].getPosish().x, robotListBuffer[0].getPosish().y);
   		model.setTiles(gameBoard);
   		
   		
