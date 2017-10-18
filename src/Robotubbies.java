@@ -12,8 +12,6 @@ public class Robotubbies {
 	
 	public static void main(String[] args) {
 		Controller controller = new Controller();
-		//View view = new View(16);
-		//Model model = new Model();
 
 		//Main-Loop for running game
 		controller.runGame();
