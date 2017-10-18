@@ -17,18 +17,19 @@ public class Controller implements ActionListener
     public final int GREEN = 3;
     public final int YELLOW = 4;
     public final int SILVER = 5;
-
-    private Model model = new Model(SIZE);
-    private View view = new View(SIZE, this);
-
+    private Model model;
+    private View view;
     private ArrayList<Integer> unvisitedGoalz = new ArrayList<Integer>();
-    public Controller(Model model, View view){
-        this.model = model; // Array
-        this.view = view;
+    
+    public Controller(){
+    	this.model = new Model(SIZE); // Array
+    	populateGameBoard();
+        this.view = new View(SIZE,model.getTiles(),this);
     }
 
-    public void runGame(Model model, View view){
+    public void runGame(){
         //getNewGoal();
+    	
         view.redraw(model.getTiles(), model.getRobots());
         //while true?
         //TODO: Get from user input
@@ -36,19 +37,23 @@ public class Controller implements ActionListener
         int direction = NORTH;
         //move(robotID, direction);
     }
-
-    private void move(int robotID, int direction){
+    /* Made this return a point for the MVP but we 
+     * should input the actual robot, move it and
+     * void output
+     */
+    private Point move(int robotID, int direction){
         int tilesMoved = 0;
         boolean[] tileHasWalls = new boolean[4];
         boolean wallBlocks, tileHasRobot;
-        int[] currentPosition = model.findRobot(robotID);
-        int[] newPosition = new int[2];
+        Robot movingRobot = model.findRobot(robotID);
+        Point currentPosition = movingRobot.getPosish();
+        Point newPosition = new Point();
         boolean canMove = true;
         int col, row;
         switch(direction){
             case NORTH :
-                col = currentPosition[1];
-                row = currentPosition[0];
+                row = currentPosition.x;
+                col = currentPosition.y;
                 while(canMove){
                     tileHasWalls = model.getWallsFromTile(row + tilesMoved + 1, col);
                     wallBlocks = tileHasWalls[2];
@@ -59,13 +64,11 @@ public class Controller implements ActionListener
                         tilesMoved++;
                     }
                 }
-                newPosition[0] = row + tilesMoved;
-                newPosition[1] = col;
-                //newPosition = {row + tilesMoved, col};
+                newPosition.setLocation(row + tilesMoved, col);
 
             case EAST :
-                col = currentPosition[1];
-                row = currentPosition[0];
+                row = currentPosition.x;
+                col = currentPosition.y;
                 while(canMove){
                     tileHasWalls = model.getWallsFromTile(row, col + tilesMoved + 1);
                     wallBlocks = tileHasWalls[3];
@@ -77,12 +80,11 @@ public class Controller implements ActionListener
                         tilesMoved++;
                     }
                 }
-                newPosition[0] = row;
-                newPosition[1] = col + tilesMoved;
+                newPosition.setLocation(row, col + tilesMoved);
 
             case SOUTH :
-                col = currentPosition[1];
-                row = currentPosition[0];
+                row = currentPosition.x;
+                col = currentPosition.y;
                 while(canMove){
                     tileHasWalls = model.getWallsFromTile(row + tilesMoved + 1, col);
                     wallBlocks = tileHasWalls[1];
@@ -94,12 +96,11 @@ public class Controller implements ActionListener
                         tilesMoved++;
                     }
                 }
-                newPosition[0] = row - tilesMoved;
-                newPosition[1] = col;
+                newPosition.setLocation(row - tilesMoved, col);
 
             case WEST :
-                col = currentPosition[1];
-                row = currentPosition[0];
+                row = currentPosition.x;
+                col = currentPosition.y;
                 while(canMove){
                     tileHasWalls = model.getWallsFromTile(row, col + tilesMoved + 1);
                     wallBlocks = tileHasWalls[2];
@@ -111,29 +112,27 @@ public class Controller implements ActionListener
                         tilesMoved++;
                     }
                 }
-                newPosition[0] = row;
-                newPosition[1] = col - tilesMoved;
+                newPosition.setLocation(row, col - tilesMoved);
 
         }
-        updateBoard(robotID, newPosition);
+        return newPosition;
     }
 
     private void updateBoard(int robotID, int[] newPosition){
         //model.setRobot(robotID, newPosition);
     }
-  
-  //Adds tiles, goals and a robots
+    //Adds tiles, goals and a robots
   	private void populateGameBoard() {
   		Tile[][] gameBoard = new Tile[SIZE][SIZE];
-  		for(int i=0; i< 16; i++) {
-  			for(int j=0; j< 16; j++) {
+  		for(int i=0; i< SIZE; i++) {
+  			for(int j=0; j< SIZE; j++) {
   				gameBoard[i][j]= new Tile(new boolean[] {false,false,false,false},false,false);
   			}
   		}
   		gameBoard = createWalls(gameBoard);
   		gameBoard = createGoals(gameBoard);
-  		Robot[] robotListBuffer = createRobots();
-  		model.setRobot(robotListBuffer[0].getId(), robotListBuffer[0].getPosish().x, robotListBuffer[0].getPosish().y);
+  		model.addRobots(createRobots());
+  		//model.setRobot(robotListBuffer[0].getId(), robotListBuffer[0].getPosish().x, robotListBuffer[0].getPosish().y);
   		model.setTiles(gameBoard);
   		
   		
