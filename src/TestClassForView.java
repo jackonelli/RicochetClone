@@ -1,3 +1,4 @@
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,38 +9,47 @@ public class TestClassForView implements ActionListener {
 	//To be used for testing the View-class. Will populate an array of tiles, add a robot and tell View to show it
 	
 	private static Tile[][] tiles;
-	private int size = 16;
+	private int SIZE = 16;
 	private View v;
+	private Robot[] theRobots = new Robot[1];
 	
 	public TestClassForView(){
-		tiles = new Tile[size][size];
-		populateTiles();
-		v = new View(size, this);		
+		
+//		populateTiles();
+		populateGameBoard();
+		v = new View(SIZE, this);		
 		run();
-		v.redraw(tiles);
+		v.redraw(tiles, theRobots);
 		v.paintFlippedTile(1);
+	}
+	
+	private Tile[][] getTiles(){
+		return tiles;
+		
+	}
+	private void setTiles(Tile[][] t){
+		tiles = t;
+		
 	}
 
 	public static void main(String[] args) {
 		TestClassForView t = new TestClassForView();
 	}
 	
-	//Adds tiles and a robot
+	
 	private void populateTiles() {
-		for(int i=0; i< size; i++) {
-			for(int j=0; j< size; j++) {
+		for(int i=0; i< SIZE; i++) {
+			for(int j=0; j< SIZE; j++) {
 				if (i==5 && j==7) {
 					//Edit to test different walls
 					tiles[i][j]= new Tile(new boolean[] {true,true,false,false},false,false);
 				}else if(i==12 && j==12){
 					//Edit to test goal tile
 					tiles[i][j]= new Tile(new boolean[] {false,false,false,false},false,true);
-				}else tiles[i][j]= new Tile(new boolean[] {false,false,false,false},false,false);
+				}else 
+					tiles[i][j]= new Tile(new boolean[] {false,false,false,false},false,false);
 			}
 		}
-		Tile t1 = tiles[2][5];
-		t1.setRobot(new Robot());
-		
 	}
 	
 	private void run() {
@@ -47,22 +57,118 @@ public class TestClassForView implements ActionListener {
 		
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				v.redraw(tiles);
+				v.redraw(tiles, theRobots);
 				//v.setTime(10);
 				//v.setScore(1000);
 			}
 		});
 		t.start();
 	}
+	
+	//Adds tiles, goals and a robots
+	private void populateGameBoard() {
+		Tile[][] gameBoard = new Tile[SIZE][SIZE];
+		for(int i=0; i< 16; i++) {
+			for(int j=0; j< 16; j++) {
+				gameBoard[i][j]= new Tile(new boolean[] {false,false,false,false},false,false);
+			}
+		}
+		gameBoard = createWalls(gameBoard);
+		gameBoard = createGoals(gameBoard);
+		theRobots = createRobots();
+		setTiles(gameBoard);
+		
+		
+	}
+	
+	private Tile[][] createWalls(Tile[][] gameBoard) {
+		int x;
+		int y;
+		
+		//Add north walls on top border of gamearea
+		for(int i=1; i< SIZE-1; i++) {
+			gameBoard[0][i] = new Tile(new boolean[] {true,false,false,false},false,false); 
+		}
+		//Add east walls on right border of gamearea
+		for(int i=1; i< SIZE-1; i++) {
+			gameBoard[i][SIZE-1] = new Tile(new boolean[] {false,true,false,false},false,false); 
+		}
+		//Add south walls on bottom border of gamearea
+		for(int i=1; i< SIZE-1; i++) {
+			gameBoard[SIZE-1][i] = new Tile(new boolean[] {false,false,true,false},false,false); 
+		}
+		//Add west walls on left border of gamearea
+		for(int i=1; i< SIZE-1; i++) {
+			gameBoard[i][0] = new Tile(new boolean[] {false,false,false,true},false,false); 
+		}
+		//Add walls to the corners of the gamearea
+		gameBoard[0][0] = new Tile(new boolean[] {true,false,false,true},false,false);
+		gameBoard[0][SIZE-1] = new Tile(new boolean[] {true,true,false,false},false,false);
+		gameBoard[SIZE-1][SIZE-1] = new Tile(new boolean[] {false,true,true,false},false,false);
+		gameBoard[SIZE-1][0] = new Tile(new boolean[] {false,false,true,true},false,false);
+		
+		Tile theTile;
+		//Add south walls to tiles within the outer border
+		Point[] southWalls = new Point[] {new Point(1,13), new Point(1,15), new Point(2,5), new Point(2,9), new Point(3,2), new Point(3,14), new Point(4,0), new Point(5,1), new Point(5,7), new Point(6,7), new Point(6,8), new Point(6,12), new Point(8,7), new Point(8,8), new Point(9,4), new Point(9,6), new Point(9,13), new Point(10,0), new Point(11,7), new Point(11,9), new Point(11,15), new Point(12,1), new Point(12,14), new Point(13,10), new Point(14,3)};
+		for(Point thePoint: southWalls) {
+			theTile = gameBoard[(int) thePoint.getX()][(int) thePoint.getY()];
+			boolean[] thePointsWalls = theTile.getWalls();
+			//Add south wall
+			thePointsWalls[2] = true;
+			gameBoard[(int) thePoint.getX()][(int) (thePoint.getY())] = new Tile(thePointsWalls,false,false);
+		}
+		
+		//Add south walls to all tiles with a north wall within the outer border
+		for(Point thePoint: southWalls) {
+			theTile = gameBoard[(int) thePoint.getX()+1][(int) thePoint.getY()];
+			boolean[] thePointsWalls = theTile.getWalls();
+			//Add north wall
+			thePointsWalls[0] = true;
+			gameBoard[(int) thePoint.getX()+1][(int) (thePoint.getY())] = new Tile(thePointsWalls,false,false);
+		}
+		
+		//Add east walls to tiles within the outer border
+		Point[] eastWalls = new Point[] {new Point(0,3), new Point(0,9), new Point(1,13), new Point(2,5), new Point(3,8), new Point(4,2), new Point(4,14), new Point(5,6), new Point(6,0), new Point(6,11), new Point(7,6), new Point(7,8), new Point(8,6), new Point(8,8), new Point(9,3), new Point(9,12), new Point(10,5), new Point(11,9), new Point(12,7), new Point(13,1), new Point(13,14), new Point(14,3), new Point(14,9), new Point(15,4), new Point(15,11)};
+		for(Point thePoint: eastWalls) {
+			theTile = gameBoard[(int) thePoint.getX()][(int) thePoint.getY()];
+			boolean[] thePointsWalls = theTile.getWalls();
+			//Add east wall
+			thePointsWalls[1] = true;
+			gameBoard[(int) thePoint.getX()][(int) (thePoint.getY())] = new Tile(thePointsWalls,false,false);
+		}
+		//Add west walls to all tiles with an east wall within the outer border
+		for(Point thePoint: eastWalls) {
+			theTile = gameBoard[(int) thePoint.getX()][(int) thePoint.getY()+1];
+			boolean[] thePointsWalls = theTile.getWalls();
+			//Add west wall
+			thePointsWalls[3] = true;
+			gameBoard[(int) thePoint.getX()][(int) (thePoint.getY()+1)] = new Tile(thePointsWalls,false,false);
+		}
+		return gameBoard;
+	}
+	
+	private Tile[][] createGoals(Tile[][] gameBoard) {
+		Point[] theGoals = new Point[] {new Point(2,5)};
+		for (Point theGoalsPoint: theGoals) {
+			Tile t = gameBoard[(int) theGoalsPoint.getX()][(int) theGoalsPoint.getY()];
+			//Add goal
+			t.setGoal();
+		}
+		return gameBoard;
+	}
+	private Robot[] createRobots() {		
+		Robot[] bufferList = new Robot[1];
+		Robot r1 = new Robot();
+		r1.setPosish(2, 1);
+		bufferList[0] = r1;
+		return bufferList;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("Klicked Restart");
 		//remove flipped tile
-		v.paintFlippedTile(0);
-
-		
-		
+		v.paintFlippedTile(0);	
 	}
 	
 }
