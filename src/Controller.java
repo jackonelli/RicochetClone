@@ -37,20 +37,23 @@ public class Controller implements ActionListener
         int direction = NORTH;
         //move(robotID, direction);
     }
-
-    private void move(int robotID, int direction){
+    /* Made this return a point for the MVP but we 
+     * should input the actual robot, move it and
+     * void output
+     */
+    private Point move(int robotID, int direction){
         int tilesMoved = 0;
         boolean[] tileHasWalls = new boolean[4];
         boolean wallBlocks, tileHasRobot;
         Robot movingRobot = model.findRobot(robotID);
         Point currentPosition = movingRobot.getPosish();
-        Point newPosition = new Point;
+        Point newPosition = new Point();
         boolean canMove = true;
         int col, row;
         switch(direction){
             case NORTH :
-                col = currentPosition.getX();
-                row = currentPosition.getY();
+                row = currentPosition.x;
+                col = currentPosition.y;
                 while(canMove){
                     tileHasWalls = model.getWallsFromTile(row + tilesMoved + 1, col);
                     wallBlocks = tileHasWalls[2];
@@ -61,11 +64,11 @@ public class Controller implements ActionListener
                         tilesMoved++;
                     }
                 }
-                newPosition.setLocation(col, row + tilesMoved);
+                newPosition.setLocation(row + tilesMoved, col);
 
             case EAST :
-                col = currentPosition.getX();
-                row = currentPosition.getY();
+                row = currentPosition.x;
+                col = currentPosition.y;
                 while(canMove){
                     tileHasWalls = model.getWallsFromTile(row, col + tilesMoved + 1);
                     wallBlocks = tileHasWalls[3];
@@ -77,11 +80,11 @@ public class Controller implements ActionListener
                         tilesMoved++;
                     }
                 }
-                newPosition.setLocation(col + tilesMoved, row);
+                newPosition.setLocation(row, col + tilesMoved);
 
             case SOUTH :
-                col = currentPosition.getX();
-                row = currentPosition.getY();
+                row = currentPosition.x;
+                col = currentPosition.y;
                 while(canMove){
                     tileHasWalls = model.getWallsFromTile(row + tilesMoved + 1, col);
                     wallBlocks = tileHasWalls[1];
@@ -93,11 +96,11 @@ public class Controller implements ActionListener
                         tilesMoved++;
                     }
                 }
-                newPosition.setLocation(col, row - tilesMoved);
+                newPosition.setLocation(row - tilesMoved, col);
 
             case WEST :
-                col = currentPosition.getX();
-                row = currentPosition.getY();
+                row = currentPosition.x;
+                col = currentPosition.y;
                 while(canMove){
                     tileHasWalls = model.getWallsFromTile(row, col + tilesMoved + 1);
                     wallBlocks = tileHasWalls[2];
@@ -109,17 +112,16 @@ public class Controller implements ActionListener
                         tilesMoved++;
                     }
                 }
-                newPosition.setLocation(col - tilesMoved, row);
+                newPosition.setLocation(row, col - tilesMoved);
 
         }
-        updateBoard(robotID, newPosition);
+        return newPosition;
     }
 
     private void updateBoard(int robotID, int[] newPosition){
         //model.setRobot(robotID, newPosition);
     }
-  
-  //Adds tiles, goals and a robots
+    //Adds tiles, goals and a robots
   	private void populateGameBoard() {
   		Tile[][] gameBoard = new Tile[SIZE][SIZE];
   		for(int i=0; i< 16; i++) {
