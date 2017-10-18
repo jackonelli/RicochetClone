@@ -11,7 +11,6 @@ public class Model {
 	public Model (int size) {
 		this.tiles = new Tile[size][size];
 	}
-
 	public Tile[][] getTiles() {
 		return this.tiles;
 	}

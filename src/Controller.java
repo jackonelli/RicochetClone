@@ -34,20 +34,24 @@ public class Controller implements ActionListener
         //while true?
         //TODO: Get from user input
         int robotID = YELLOW;
-        int direction = NORTH;
-        //move(robotID, direction);
+        int direction = SOUTH;
+        Robot robot = model.getRobots()[0];
+        Point newPosish = move(robot.getId(), direction);
+        robot.setPosish(newPosish.x, newPosish.y);
+        view.redraw(model.getTiles(), model.getRobots());
     }
     /* Made this return a point for the MVP but we 
      * should input the actual robot, move it and
      * void output
      */
     private Point move(int robotID, int direction){
-        int tilesMoved = 0;
-        boolean[] tileHasWalls = new boolean[4];
-        boolean wallBlocks, tileHasRobot;
         Robot movingRobot = model.findRobot(robotID);
         Point currentPosition = movingRobot.getPosish();
+        System.out.println(currentPosition);
         Point newPosition = new Point();
+        boolean[] tileHasWalls = new boolean[4];
+        boolean wallBlocks, tileHasRobot;
+        boolean atBounds;
         boolean canMove = true;
         int col, row;
         switch(direction){
@@ -55,66 +59,87 @@ public class Controller implements ActionListener
                 row = currentPosition.x;
                 col = currentPosition.y;
                 while(canMove){
-                    tileHasWalls = model.getWallsFromTile(row + tilesMoved + 1, col);
+                    atBounds = (row) == 0;
+                    if(atBounds){
+                        break;
+                    }
+                    tileHasWalls = model.getWallsFromTile(row - 1, col);
                     wallBlocks = tileHasWalls[2];
-                    tileHasRobot = model.tileHasRobot(row + tilesMoved + 1, col);
+                    tileHasRobot = model.tileHasRobot(row - 1, col);
                     if(wallBlocks || tileHasRobot){
                         canMove = false;
                     } else {
-                        tilesMoved++;
+                        row--;
                     }
                 }
-                newPosition.setLocation(row + tilesMoved, col);
+                newPosition.setLocation(row, col);
+                break;
 
             case EAST :
                 row = currentPosition.x;
                 col = currentPosition.y;
                 while(canMove){
-                    tileHasWalls = model.getWallsFromTile(row, col + tilesMoved + 1);
+                    atBounds = (col) == SIZE;
+                    if(atBounds){
+                        break;
+                    }
+                    tileHasWalls = model.getWallsFromTile(row, col + 1);
                     wallBlocks = tileHasWalls[3];
                     // Access tile?
-                    tileHasRobot = model.tileHasRobot(row, col + tilesMoved + 1);
+                    tileHasRobot = model.tileHasRobot(row, col + 1);
                     if(wallBlocks || tileHasRobot){
                         canMove = false;
                     } else {
-                        tilesMoved++;
+                        col++;
                     }
                 }
-                newPosition.setLocation(row, col + tilesMoved);
+                newPosition.setLocation(row, col);
+                break;
 
             case SOUTH :
                 row = currentPosition.x;
                 col = currentPosition.y;
                 while(canMove){
-                    tileHasWalls = model.getWallsFromTile(row + tilesMoved + 1, col);
+                    atBounds = (row) == SIZE;
+                    if(atBounds){
+                        break;
+                    }
+                    tileHasWalls = model.getWallsFromTile(row + 1, col);
                     wallBlocks = tileHasWalls[1];
+                    System.out.println(row);
+                    System.out.println(wallBlocks);
                     // Access tile?
-                    tileHasRobot = model.tileHasRobot(row + tilesMoved + 1, col);
+                    tileHasRobot = model.tileHasRobot(row + 1, col);
                     if(wallBlocks || tileHasRobot){
                         canMove = false;
                     } else {
-                        tilesMoved++;
+                        row++;
                     }
                 }
-                newPosition.setLocation(row - tilesMoved, col);
+                newPosition.setLocation(row, col);
+                break;
 
             case WEST :
                 row = currentPosition.x;
                 col = currentPosition.y;
                 while(canMove){
-                    tileHasWalls = model.getWallsFromTile(row, col + tilesMoved + 1);
+                    atBounds = (col) == 0;
+                    if(atBounds){
+                        break;
+                    }
+                    tileHasWalls = model.getWallsFromTile(row, col - 1);
                     wallBlocks = tileHasWalls[2];
                     // Access tile?
-                    tileHasRobot = model.tileHasRobot(row, col + tilesMoved + 1);
+                    tileHasRobot = model.tileHasRobot(row, col - 1);
                     if(wallBlocks || tileHasRobot){
                         canMove = false;
                     } else {
-                        tilesMoved++;
+                        col--;
                     }
                 }
-                newPosition.setLocation(row, col - tilesMoved);
-
-        }
+                newPosition.setLocation(row, col);
+                break;
+        } // End switch
         return newPosition;
     }
 
