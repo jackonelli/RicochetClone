@@ -49,6 +49,7 @@ public class View extends JFrame {
     private static final String GOAL_TILE_IMAGE_URL ="assets/graphics/layers/Goal.png";
     private JLabel timeValueLable;
     private JLabel scoreValueLable;
+    private JLabel movesValueLable;
     private ActionListener al;
     private int flippedTile;
     private Robot[] theRobots;
@@ -88,6 +89,7 @@ public class View extends JFrame {
 		this.setVisible(true);	
 		
 	}
+	
 	private void initiateView() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(windowSize);
@@ -109,6 +111,7 @@ public class View extends JFrame {
 	}
 	private void initiateInfoTab() {
 		infoTab.setBackground(Color.GRAY);
+		infoTab.setLayout(new BoxLayout(infoTab, BoxLayout.PAGE_AXIS));
 	}
 	
 	public class GameArea extends JPanel {
@@ -206,31 +209,43 @@ public class View extends JFrame {
 		
 		public InfoTab() {
 			Font theFont = new Font("Courier New", Font.ITALIC, 24);
-			JLabel timeTextLable = new JLabel("Time left: ");
-			timeTextLable.setFont(theFont);
-			timeValueLable = new JLabel("1:00:00");
-			timeValueLable.setFont(theFont);
-			JLabel scoreTextLable = new JLabel("Score: ");
-			scoreTextLable.setFont(theFont);
-			scoreValueLable = new JLabel("0");
-			scoreValueLable.setFont(theFont);
-			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+			
+			
+			
 			
 			//Define area for spacing to top
 			JPanel spaceTop = new JPanel();
 			spaceTop.setMaximumSize(new Dimension(300, 50));
 			
 			//Define area for time
+			JLabel timeTextLable = new JLabel("Time left: ");
+			timeTextLable.setFont(theFont);
+			timeValueLable = new JLabel("60");
+			timeValueLable.setFont(theFont);
 			JPanel timeContainer = new JPanel();
 			timeContainer.setMaximumSize(new Dimension(300, 50));
 			timeContainer.add(timeTextLable);
 			timeContainer.add(timeValueLable);
 			
 			//Define area for score
+			JLabel scoreTextLable = new JLabel("Score: ");
+			scoreTextLable.setFont(theFont);
+			scoreValueLable = new JLabel("0");
+			scoreValueLable.setFont(theFont);
 			JPanel scoreContainer = new JPanel();
 			scoreContainer.setMaximumSize(new Dimension(300, 50));
 			scoreContainer.add(scoreTextLable);
 			scoreContainer.add(scoreValueLable);
+			
+			//Define area for score
+			JLabel movesTextLable = new JLabel("Moves: ");
+			movesTextLable.setFont(theFont);
+			movesValueLable = new JLabel("0");
+			movesValueLable.setFont(theFont);
+			JPanel movesContainer = new JPanel();
+			movesContainer.setMaximumSize(new Dimension(300, 50));
+			movesContainer.add(movesTextLable);
+			movesContainer.add(movesValueLable);
 			
 			//Define restart button
 			Button restartButton = new Button("Restart");
@@ -244,7 +259,9 @@ public class View extends JFrame {
 			this.add(spaceTop);
 			this.add(timeContainer);
 			this.add(scoreContainer);
+			this.add(movesContainer);
 			this.add(restartButton);
+
 		}
 	}
 	
@@ -280,7 +297,7 @@ public class View extends JFrame {
 	/**
 	 * @param time - the current time in the game
 	 */
-	public void setTime(int time) {
+	public void setTimerTime(int time) {
 		timeValueLable.setText(String.valueOf(time));
 	}
 	
@@ -289,6 +306,9 @@ public class View extends JFrame {
 	 */
 	public void setScore(int score) {
 		scoreValueLable.setText(String.valueOf(score));
+	}
+	public void setMoves(String inputNumbers) {
+		movesValueLable.setText(inputNumbers);
 	}
 	
 	/**

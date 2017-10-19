@@ -1,7 +1,11 @@
 import java.util.ArrayList;
+import javax.swing.Timer;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Controller implements ActionListener
@@ -21,14 +25,95 @@ public class Controller implements ActionListener
     private Model model;
     private View view;
     private ArrayList<Integer> unvisitedGoalz = new ArrayList<Integer>();
+    Timer theTimer;
+    private int timerTime;
+    String inputNumbers = "0";
     
     public Controller(){
     	this.model = new Model(SIZE); // Array
-	//this.addKeyListener((KeyListener) new KeyBoardListener());
+
     	populateGameBoard();
         this.view = new View(SIZE,model.getTiles(),this);
-        view.addKeyListener((KeyListener) new KeyboardListener());
+        //Using another way of tracking keypresses within Controller instead
+        //view.addKeyListener((KeyListener) new KeyboardListener());
+        initiateKeyEventDispatcher();
+        theTimer = new Timer(1000, this);
+        timerTime = 60;        
+        
+   
     }
+    
+    private void initiateKeyEventDispatcher() {
+    	KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(final KeyEvent e) {
+            	
+                if(e.getID() == KeyEvent.KEY_PRESSED){
+	                int keyCode = e.getKeyCode();
+	                
+	                switch ( keyCode ) {
+	                	case KeyEvent.VK_UP:
+	                	System.out.print("Up");
+	                    break;
+	                	case KeyEvent.VK_DOWN:
+	                		System.out.print("Down");
+	                    break;
+	                	case KeyEvent.VK_LEFT:
+	                		System.out.print("Left");
+	                    break;
+	                	case KeyEvent.VK_RIGHT :
+	                		System.out.print("Right");
+	                    break;
+	                	case KeyEvent.VK_0 :
+	                		sendKeyInputToView(0);
+	                    break;
+	                	case KeyEvent.VK_1 :
+	                		sendKeyInputToView(1);
+	                    break;
+	                	case KeyEvent.VK_2 :
+	                		sendKeyInputToView(2);
+	                    break;
+	                	case KeyEvent.VK_3 :
+	                		sendKeyInputToView(3);
+	                    break;
+	                	case KeyEvent.VK_4 :
+	                		sendKeyInputToView(4);
+	                    break;
+	                	case KeyEvent.VK_5 :
+	                		sendKeyInputToView(5);
+	                    break;
+	                	case KeyEvent.VK_6 :
+	                		sendKeyInputToView(6);
+	                    break;
+	                	case KeyEvent.VK_7 :
+	                		sendKeyInputToView(7);
+	                    break;
+	                	case KeyEvent.VK_8 :
+	                		sendKeyInputToView(8);
+	                    break;
+	                	case KeyEvent.VK_9 :
+	                		sendKeyInputToView(9);
+	                    break;
+	                	case KeyEvent.VK_ENTER :
+	                		inputNumbers = "0";
+	                		theTimer.start();
+	                    break;
+	                }
+                }
+                return false;
+            }
+        });
+    }
+    
+    private void sendKeyInputToView(int i) {
+    	
+    	if (inputNumbers == "0") {
+    		inputNumbers = Integer.toString(i);
+    	}else {inputNumbers += Integer.toString(i);}
+    	view.setMoves(inputNumbers);
+    }
+    
+    
 
     public void runGame(){
         //getNewGoal();
@@ -50,7 +135,7 @@ public class Controller implements ActionListener
     private Point move(int robotID, int direction){
         Robot movingRobot = model.findRobot(robotID);
         Point currentPosition = movingRobot.getPosish();
-        System.out.println(currentPosition);
+        //System.out.println(currentPosition);
         Point newPosition = new Point();
         boolean[] tileHasWalls = new boolean[4];
         boolean wallBlocks, tileHasRobot;
@@ -109,8 +194,8 @@ public class Controller implements ActionListener
                     }
                     tileHasWalls = model.getWallsFromTile(row + 1, col);
                     wallBlocks = tileHasWalls[1];
-                    System.out.println(row);
-                    System.out.println(wallBlocks);
+                    //System.out.println(row);
+                    //System.out.println(wallBlocks);
                     // Access tile?
                     tileHasRobot = model.tileHasRobot(row + 1, col);
                     if(wallBlocks || tileHasRobot){
@@ -250,7 +335,17 @@ public class Controller implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getID() == 1001) {
-			System.out.println("Clicked restart button");
+			theTimer.stop();
+			view.setTimerTime(timerTime = 60);	
+			view.setMoves("0");
+		}
+		if (e.getID()==0) {
+			timerTick();
 		}
 	}
+	
+	private void timerTick() {
+		timerTime --;
+		view.setTimerTime(timerTime);
+	}	
 }
