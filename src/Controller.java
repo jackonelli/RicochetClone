@@ -28,6 +28,7 @@ public class Controller implements ActionListener
     Timer theTimer;
     private int timerTime;
     String inputNumbers = "0";
+    Robot theRobot;
     
     public Controller(){
     	this.model = new Model(SIZE); // Array
@@ -39,72 +40,8 @@ public class Controller implements ActionListener
         initiateKeyEventDispatcher();
         theTimer = new Timer(1000, this);
         timerTime = 60;        
-        
-   
     }
-    
-    private void initiateKeyEventDispatcher() {
-    	KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-            @Override
-            public boolean dispatchKeyEvent(final KeyEvent e) {
-            	
-                if(e.getID() == KeyEvent.KEY_PRESSED){
-	                int keyCode = e.getKeyCode();
-	                
-	                switch ( keyCode ) {
-	                	case KeyEvent.VK_UP:
-	                	System.out.print("Up");
-	                    break;
-	                	case KeyEvent.VK_DOWN:
-	                		System.out.print("Down");
-	                    break;
-	                	case KeyEvent.VK_LEFT:
-	                		System.out.print("Left");
-	                    break;
-	                	case KeyEvent.VK_RIGHT :
-	                		System.out.print("Right");
-	                    break;
-	                	case KeyEvent.VK_0 :
-	                		sendKeyInputToView(0);
-	                    break;
-	                	case KeyEvent.VK_1 :
-	                		sendKeyInputToView(1);
-	                    break;
-	                	case KeyEvent.VK_2 :
-	                		sendKeyInputToView(2);
-	                    break;
-	                	case KeyEvent.VK_3 :
-	                		sendKeyInputToView(3);
-	                    break;
-	                	case KeyEvent.VK_4 :
-	                		sendKeyInputToView(4);
-	                    break;
-	                	case KeyEvent.VK_5 :
-	                		sendKeyInputToView(5);
-	                    break;
-	                	case KeyEvent.VK_6 :
-	                		sendKeyInputToView(6);
-	                    break;
-	                	case KeyEvent.VK_7 :
-	                		sendKeyInputToView(7);
-	                    break;
-	                	case KeyEvent.VK_8 :
-	                		sendKeyInputToView(8);
-	                    break;
-	                	case KeyEvent.VK_9 :
-	                		sendKeyInputToView(9);
-	                    break;
-	                	case KeyEvent.VK_ENTER :
-	                		inputNumbers = "0";
-	                		theTimer.start();
-	                    break;
-	                }
-                }
-                return false;
-            }
-        });
-    }
-    
+
     private void sendKeyInputToView(int i) {
     	
     	if (inputNumbers == "0") {
@@ -113,26 +50,21 @@ public class Controller implements ActionListener
     	view.setMoves(inputNumbers);
     }
     
-    
-
     public void runGame(){
         //getNewGoal();
-    	
         view.redraw(model.getTiles(), model.getRobots());
         //while true?
         //TODO: Get from user input
         int robotID = YELLOW;
         int direction = SOUTH;
-        Robot robot = model.getRobots()[0];
-        Point newPosish = move(robot.getId(), direction);
-        robot.setPosish(newPosish.x, newPosish.y);
+        theRobot = model.getRobots()[0];
         view.redraw(model.getTiles(), model.getRobots());
     }
     /* Made this return a point for the MVP but we 
      * should input the actual robot, move it and
      * void output
      */
-    private Point move(int robotID, int direction){
+    private void move(int robotID, int direction){
         Robot movingRobot = model.findRobot(robotID);
         Point currentPosition = movingRobot.getPosish();
         //System.out.println(currentPosition);
@@ -160,9 +92,10 @@ public class Controller implements ActionListener
                         row--;
                     }
                 }
-                newPosition.setLocation(row, col);
+                movingRobot.setPosish(row, col);
+                view.redraw(model.getTiles(), model.getRobots());
                 break;
-
+                
             case EAST :
                 row = currentPosition.x;
                 col = currentPosition.y;
@@ -181,7 +114,8 @@ public class Controller implements ActionListener
                         col++;
                     }
                 }
-                newPosition.setLocation(row, col);
+                movingRobot.setPosish(row, col);
+                view.redraw(model.getTiles(), model.getRobots());
                 break;
 
             case SOUTH :
@@ -204,7 +138,8 @@ public class Controller implements ActionListener
                         row++;
                     }
                 }
-                newPosition.setLocation(row, col);
+                movingRobot.setPosish(row, col);
+                view.redraw(model.getTiles(), model.getRobots());
                 break;
 
             case WEST :
@@ -225,10 +160,10 @@ public class Controller implements ActionListener
                         col--;
                     }
                 }
-                newPosition.setLocation(row, col);
+                movingRobot.setPosish(row, col);
+                view.redraw(model.getTiles(), model.getRobots());
                 break;
-        } // End switch
-        return newPosition;
+        } // End switch 
     }
 
     private void updateBoard(int robotID, int[] newPosition){
@@ -348,4 +283,70 @@ public class Controller implements ActionListener
 		timerTime --;
 		view.setTimerTime(timerTime);
 	}	
+	
+	private void initiateKeyEventDispatcher() {
+    	KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
+            @Override
+            public boolean dispatchKeyEvent(final KeyEvent e) {
+            	
+                if(e.getID() == KeyEvent.KEY_PRESSED){
+	                int keyCode = e.getKeyCode();
+	                
+	                switch ( keyCode ) {
+	                	case KeyEvent.VK_UP:
+		                	System.out.print("Up");
+		                	move(theRobot.getId(), NORTH);		                    
+	                    break;
+	                	case KeyEvent.VK_DOWN:
+	                		System.out.print("Down");
+	                		move(theRobot.getId(), SOUTH);
+	                    break;
+	                	case KeyEvent.VK_LEFT:
+	                		System.out.print("Left");
+	                		move(theRobot.getId(), WEST);
+	                    break;
+	                	case KeyEvent.VK_RIGHT :
+	                		System.out.print("Right");
+	                		move(theRobot.getId(), EAST);
+	                    break;
+	                	case KeyEvent.VK_0 :
+	                		sendKeyInputToView(0);
+	                    break;
+	                	case KeyEvent.VK_1 :
+	                		sendKeyInputToView(1);
+	                    break;
+	                	case KeyEvent.VK_2 :
+	                		sendKeyInputToView(2);
+	                    break;
+	                	case KeyEvent.VK_3 :
+	                		sendKeyInputToView(3);
+	                    break;
+	                	case KeyEvent.VK_4 :
+	                		sendKeyInputToView(4);
+	                    break;
+	                	case KeyEvent.VK_5 :
+	                		sendKeyInputToView(5);
+	                    break;
+	                	case KeyEvent.VK_6 :
+	                		sendKeyInputToView(6);
+	                    break;
+	                	case KeyEvent.VK_7 :
+	                		sendKeyInputToView(7);
+	                    break;
+	                	case KeyEvent.VK_8 :
+	                		sendKeyInputToView(8);
+	                    break;
+	                	case KeyEvent.VK_9 :
+	                		sendKeyInputToView(9);
+	                    break;
+	                	case KeyEvent.VK_ENTER :
+	                		inputNumbers = "0";
+	                		theTimer.start();
+	                    break;
+	                }
+                }
+                return false;
+            }
+        });
+    }
 }

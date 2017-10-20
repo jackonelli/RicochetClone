@@ -210,9 +210,6 @@ public class View extends JFrame {
 		public InfoTab() {
 			Font theFont = new Font("Courier New", Font.ITALIC, 24);
 			
-			
-			
-			
 			//Define area for spacing to top
 			JPanel spaceTop = new JPanel();
 			spaceTop.setMaximumSize(new Dimension(300, 50));
