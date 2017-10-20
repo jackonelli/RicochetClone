@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 
 public class Controller implements ActionListener
 {
+	int NR_OF_PLAYERS = 1;
     public final int SIZE = 16;
     public final int NUMBER_OF_ROBOTS = 5;
     public final int NUMBER_OF_GOALZ = 17;
@@ -28,38 +29,52 @@ public class Controller implements ActionListener
     Timer theTimer;
     private int timerTime;
     String inputNumbers = "0";
-
-
-    
+  
     public Controller(){
-    	this.model = new Model(SIZE); // Array
-
-    	populateGameBoard();
-        this.view = new View(SIZE,model.getTiles(),this);
+    	initiateGame();
+    	initiateKeyEventDispatcher();
+    	
         //Using another way of tracking keypresses within Controller instead
         //view.addKeyListener((KeyListener) new KeyboardListener());
-        initiateKeyEventDispatcher();
-        theTimer = new Timer(1000, this);
-        timerTime = 60;    
+    }
+    
+    public void initiateGame(){
+    	this.model = new Model(SIZE); // Array
+    	populateGameBoard();
+    	this.view = new View(SIZE,model.getTiles(),this);
+    	theTimer = new Timer(1000, this);
+        timerTime = 60;   
+  		model.addRobots(createRobots());
+        theRobot = model.getRobots()[0];  
+        updateGUI();
     }
 
     private void sendKeyInputToView(int i) {
-    	
     	if (inputNumbers == "0") {
     		inputNumbers = Integer.toString(i);
     	}else {inputNumbers += Integer.toString(i);}
     	view.setMoves(inputNumbers);
     }
     
+    private void checkIfRobotIsOnCorrectGoal() {
+    	if (model.getTile(theRobot.getPosish().x, theRobot.getPosish().y).hasGoal()) {
+    		System.out.println("Träff");
+    	}
+    }
+    
+    private void updateGUI() {
+    	view.redraw(model.getTiles(), model.getRobots());
+    }
+    
     public void runGame(){
         //getNewGoal();
-        view.redraw(model.getTiles(), model.getRobots());
+    	//updateGUI();
         //while true?
         //TODO: Get from user input
         int robotID = YELLOW;
         int direction = SOUTH;
-        theRobot = model.getRobots()[0];
-        view.redraw(model.getTiles(), model.getRobots());
+        
+        
     }
     /* Made this return a point for the MVP but we 
      * should input the actual robot, move it and
@@ -73,11 +88,11 @@ public class Controller implements ActionListener
     boolean canMove;
     int col, row;
     private void move(int robotID, int direction){
-        Robot movingRobot = model.findRobot(robotID);
-        currentPosition = movingRobot.getPosish();
+        currentPosition = model.findRobot(robotID).getPosish();
         canMove = true;
         row = currentPosition.x;
         col = currentPosition.y;
+
         switch(direction){
             case NORTH :
                 while(canMove){
@@ -85,7 +100,7 @@ public class Controller implements ActionListener
                     if(atBounds){
                         break;
                     }
-                    tileHasWalls = model.getWallsFromTile(row, col);
+                    tileHasWalls = model.getWallsFromTile(row, col);  
                     wallBlocks = tileHasWalls[0];
                     tileHasRobot = model.tileHasRobot(row - 1, col);
                     if(wallBlocks || tileHasRobot){
@@ -153,14 +168,14 @@ public class Controller implements ActionListener
                     }
                 }
                 moveRobot(theRobot,new Point(row, col));
-                break;
-                
+                break;    
         } // End switch 
     }
 
     private void moveRobot(Robot theRobot, Point currentPosition) {
     	theRobot.setPosish(currentPosition.x,currentPosition.y);
-    	view.redraw(model.getTiles(), model.getRobots());
+    	checkIfRobotIsOnCorrectGoal();
+    	updateGUI();
 	}
 
 	private void updateBoard(int robotID, int[] newPosition){
@@ -176,8 +191,6 @@ public class Controller implements ActionListener
   		}
   		gameBoard = createWalls(gameBoard);
   		gameBoard = createGoals(gameBoard);
-  		model.addRobots(createRobots());
-  		//model.setRobot(robotListBuffer[0].getId(), robotListBuffer[0].getPosish().x, robotListBuffer[0].getPosish().y);
   		model.setTiles(gameBoard);
   	}
   	
@@ -255,10 +268,16 @@ public class Controller implements ActionListener
   	}
   	
   	private Robot[] createRobots() {		
-		Robot[] bufferList = new Robot[1];
+		Robot[] bufferList = new Robot[2];
 		Robot r1 = new Robot();
+		Robot r2 = new Robot();
 		r1.setPosish(2, 1);
+		r1.setID(RED);
+		r2.setPosish(4, 7);
+		r2.setID(BLUE);
 		bufferList[0] = r1;
+		bufferList[1] = r2;
+		
 		return bufferList;
 	}
   	
@@ -289,19 +308,15 @@ public class Controller implements ActionListener
 	                
 	                switch ( keyCode ) {
 	                	case KeyEvent.VK_UP:
-		                	System.out.print("Up");
 		                	move(theRobot.getId(), NORTH);		                    
 	                    break;
 	                	case KeyEvent.VK_DOWN:
-	                		System.out.print("Down");
 	                		move(theRobot.getId(), SOUTH);
 	                    break;
 	                	case KeyEvent.VK_LEFT:
-	                		System.out.print("Left");
 	                		move(theRobot.getId(), WEST);
 	                    break;
 	                	case KeyEvent.VK_RIGHT :
-	                		System.out.print("Right");
 	                		move(theRobot.getId(), EAST);
 	                    break;
 	                	case KeyEvent.VK_0 :

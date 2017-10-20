@@ -15,6 +15,11 @@ public class Model {
 		return this.tiles;
 	}
 	
+	public Tile getTile(int x, int y) {
+		return tiles[x][y];
+		
+	}
+	
 	public void setTiles(Tile[][] gameBoard) {
 		tiles = gameBoard;
 	}

@@ -19,4 +19,7 @@ public class Robot {
 	public void setPosish(int row, int col){
 		posish = new Point(row, col);
 	}
+	public void setID(int id) {
+		this.id = id;
+	}
 }

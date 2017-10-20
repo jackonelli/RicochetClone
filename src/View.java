@@ -31,7 +31,8 @@ public class View extends JFrame {
     private int gameAreaSize = 650;
     private int leftPaneWidth = gameAreaSize + 300;
     private Dimension windowSize = new Dimension (1280,720); //Dimensions of the window
-    private static Image robotImage;
+    private static Image robotRedImage;
+    private static Image robotBlueImage;
     private static Image emptyTileImage;
     private static Image nTileImage;
     private static Image sTileImage;
@@ -39,7 +40,8 @@ public class View extends JFrame {
     private static Image eTileImage;
     private static Image middleTileImage;
     private static Image goalTileImage;
-    private static final String ROBOT_IMAGE_URL ="assets/graphics/layers/RedRobot.png";
+    private static final String ROBOT_RED_IMAGE_URL ="assets/graphics/layers/RedRobot.png";
+    private static final String ROBOT_BLUE_IMAGE_URL ="assets/graphics/Robot-Vacuum.png";
     private static final String EMPTY_TILE_IMAGE_URL ="assets/graphics/layers/Tile.png";   
     private static final String N_TILE_IMAGE_URL ="assets/graphics/layers/WallNorth.png";
     private static final String S_TILE_IMAGE_URL ="assets/graphics/layers/WallSouth.png";
@@ -156,7 +158,7 @@ public class View extends JFrame {
 		private void drawRobots(Graphics2D g2d) {
 			if (theRobots != null){
 				for(Robot r: theRobots) {
-					drawRobot(g2d, r.getPosish());
+					drawRobot(g2d, r.getPosish(), r.getId());
 				}
 			}	
 		}
@@ -185,8 +187,16 @@ public class View extends JFrame {
 		private void drawEmptyTile(Graphics2D g2d) {
 			g2d.drawImage(emptyTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
 		}
-		private void drawRobot(Graphics2D g2d, Point p) {
-			g2d.drawImage(robotImage, (p.y)*tileWidth, (p.x)*tileHeight, tileWidth, tileHeight, this);
+		private void drawRobot(Graphics2D g2d, Point p, int id) {
+			//Blue = 1, Red = 2, Green = 3, Yellow = 4, Silver = 5
+			switch(id) {
+			case 1:
+				g2d.drawImage(robotBlueImage, (p.y)*tileWidth, (p.x)*tileHeight, tileWidth, tileHeight, this);
+				break;
+			case 2: 
+				g2d.drawImage(robotRedImage, (p.y)*tileWidth, (p.x)*tileHeight, tileWidth, tileHeight, this);
+			}
+			
 		}
 		private void drawGoalTile(Graphics2D g2d) {
 				g2d.drawImage(goalTileImage, recPosX, recPosY, tileWidth, tileHeight, this);
@@ -274,8 +284,10 @@ public class View extends JFrame {
 	
 	private void importImages() throws IOException {
 		BufferedImage importImg;
-		importImg  = ImageIO.read(new File(ROBOT_IMAGE_URL));
-		robotImage = importImg;
+		importImg  = ImageIO.read(new File(ROBOT_RED_IMAGE_URL));
+		robotRedImage = importImg;
+		importImg  = ImageIO.read(new File(ROBOT_BLUE_IMAGE_URL));
+		robotBlueImage = importImg;
 		importImg  = ImageIO.read(new File(EMPTY_TILE_IMAGE_URL));
 		emptyTileImage = importImg;
 		importImg  = ImageIO.read(new File(N_TILE_IMAGE_URL));
