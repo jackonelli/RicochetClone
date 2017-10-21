@@ -1,5 +1,4 @@
 <project name="Robotubbies" basedir="." default="main">
-
     <property name="src.dir"     value="src"/>
 
     <property name="build.dir"   value="build"/>
@@ -14,7 +13,7 @@
 
     <target name="compile">
         <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}"/>
+        <javac encoding="iso-8859-1" srcdir="${src.dir}" destdir="${classes.dir}"/>
     </target>
 
     <target name="jar" depends="compile">
